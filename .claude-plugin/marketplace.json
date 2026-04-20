@@ -1,0 +1,21 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "DestinyV-marketplace",
+  "description": "DestinyV 企业级 Claude Code 插件市场，包含规范驱动开发（SDD+TDD）完整工作流和多种开发工具插件。",
+  "owner": {
+    "name": "DestinyV"
+  },
+  "plugins": [
+    {
+      "name": "sdd-tdd-dev",
+      "version": "2.3.0",
+      "source": "./plugins/sdd-tdd-dev",
+      "description": "企业级SDD+TDD（规范驱动开发）Claude Code插件，提供AI辅助开发的完整工作流。包含Spec-Design-Task-Execute-Test 5个阶段的专业Skills，支持前端、后端、数据库、微服务等全类型项目。",
+      "category": "development",
+      "homepage": "https://github.com/DestinyV/sdd-tdd-dev/tree/main",
+      "author": {
+        "name": "DestinyV"
+      }
+    }
+  ]
+}

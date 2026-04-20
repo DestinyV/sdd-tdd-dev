@@ -1,0 +1,239 @@
+{
+  "name": "sdd-dev-plugin",
+  "version": "2.3.0",
+  "description": "Enterprise-grade SDD (Spec-Driven Development) plugin for AI-assisted development. Supports full-stack development with current focus on modern front-end frameworks (React/Vue/Angular).",
+  "main": "skills",
+  "type": "module",
+  "keywords": [
+    "claude-code",
+    "skills",
+    "AI开发工作流",
+    "Spec驱动设计",
+    "SDD",
+    "代码生成",
+    "测试生成",
+    "需求分析",
+    "规范生成",
+    "Spec-Design-Task-Execute-Test",
+    "前端开发",
+    "全栈开发",
+    "企业级开发"
+  ],
+  "author": "DestinyV",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DestinyV/sdd-tdd-dev.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DestinyV/sdd-tdd-dev/issues"
+  },
+  "homepage": "https://github.com/DestinyV/sdd-tdd-dev#readme",
+  "stack": {
+    "current": "frontend",
+    "supported": ["frontend", "backend", "fullstack"],
+    "frontend_frameworks": ["React", "Vue.js", "Angular", "Svelte"],
+    "backend_frameworks": ["Spring Boot", "Django", "Node.js/Express", "ASP.NET"],
+    "description": "Platform-agnostic SDD workflow that adapts to different tech stacks"
+  },
+  "skills": [
+    {
+      "name": "spec-creation",
+      "path": "skills/spec-creation",
+      "order": 1,
+      "description": "第1步：需求分析和规范生成。接收需求内容，通过交互式分析进行多次确认，输出BDD格式的规范文档（WHEN-THEN格式）。",
+      "supports": ["frontend", "backend", "fullstack"],
+      "input": {
+        "type": "需求描述",
+        "format": "文本或需求ID",
+        "example": "需要实现订单管理系统，支持搜索、排序、分页、批量操作"
+      },
+      "output": {
+        "path": "spec-dev/{requirement_desc_abstract}/spec/",
+        "files": [
+          "README.md (规范总览)",
+          "scenarios/*.md (BDD场景，WHEN-THEN格式)",
+          "data-models.md (数据模型定义)",
+          "business-rules.md (业务规则和约束)",
+          "glossary.md (术语表)"
+        ]
+      },
+      "next_skill": "code-designer",
+      "dependencies": [],
+      "key_features": [
+        "BDD格式规范（WHEN-THEN）",
+        "多轮确认确保完整性",
+        "场景多维度拆解（用户、流程、数据、异常）",
+        "自动生成数据模型和业务规则"
+      ]
+    },
+    {
+      "name": "code-designer",
+      "path": "skills/code-designer",
+      "order": 2,
+      "description": "第2步：代码设计规划。根据规范和需求进行架构和技术设计分析，生成代码实现方案和设计决策文档。",
+      "supports": ["frontend", "backend", "fullstack"],
+      "input": {
+        "type": "规范文档 + 需求",
+        "path": "spec-dev/{requirement_desc_abstract}/spec/",
+        "example": "读取spec/README.md和scenarios/*.md"
+      },
+      "output": {
+        "path": "spec-dev/{requirement_desc_abstract}/design/",
+        "files": [
+          "design.md (详细的设计方案，包括架构、技术选型、设计决策)"
+        ]
+      },
+      "previous_skill": "spec-creation",
+      "next_skill": "code-task",
+      "dependencies": ["spec-creation"],
+      "key_features": [
+        "参考实现分析",
+        "需求-参考差异确认",
+        "完整的架构设计",
+        "清晰的设计决策记录"
+      ]
+    },
+    {
+      "name": "code-task",
+      "path": "skills/code-task",
+      "order": 3,
+      "description": "第3步：任务列表生成。将设计转换为详细的代码级别任务列表，为开发者定义具体的实现任务和交付物。",
+      "supports": ["frontend", "backend", "fullstack"],
+      "input": {
+        "type": "设计方案",
+        "path": "spec-dev/{requirement_desc_abstract}/design/design.md",
+        "example": "读取design.md中的设计方案"
+      },
+      "output": {
+        "path": "spec-dev/{requirement_desc_abstract}/tasks/",
+        "files": [
+          "tasks.md (详细的任务清单，包括每个Task的目标、交付物、验收标准、依赖关系)"
+        ]
+      },
+      "previous_skill": "code-designer",
+      "next_skill": "code-execute",
+      "dependencies": ["code-designer"],
+      "key_features": [
+        "设计分解为具体任务",
+        "合理的任务粒度控制",
+        "清晰的依赖关系定义",
+        "可衡量的验收标准"
+      ]
+    },
+    {
+      "name": "code-execute",
+      "path": "skills/code-execute",
+      "order": 4,
+      "description": "第4步：代码执行实现。根据任务列表通过子代理逐个实现代码，进行规范审查和质量审查的多阶段把控。",
+      "supports": ["frontend", "backend", "fullstack"],
+      "input": {
+        "type": "任务列表 + 规范",
+        "paths": [
+          "spec-dev/{requirement_desc_abstract}/tasks/tasks.md",
+          "spec-dev/{requirement_desc_abstract}/spec/",
+          "spec-dev/{requirement_desc_abstract}/design/design.md"
+        ],
+        "example": "读取tasks.md中的所有Task定义"
+      },
+      "output": {
+        "paths": [
+          "src/** (生成的源代码)",
+          "spec-dev/{requirement_desc_abstract}/execution/"
+        ],
+        "files": [
+          "execution-report.md (执行过程报告，包括每个Task的完成状态、发现的问题、修复情况)"
+        ]
+      },
+      "previous_skill": "code-task",
+      "next_skill": "code-test",
+      "dependencies": ["code-task", "code-designer", "spec-creation"],
+      "key_features": [
+        "子代理驱动实现",
+        "规范审查（确保符合design.md）",
+        "质量审查（确保代码质量）",
+        "修复循环（问题修复后重新审查）"
+      ]
+    },
+    {
+      "name": "code-test",
+      "path": "skills/code-test",
+      "order": 5,
+      "description": "第5步：代码审核和测试。对生成的代码进行质量审核、测试用例设计、单元测试、集成测试、E2E测试和闭环验证。",
+      "supports": ["frontend", "backend", "fullstack"],
+      "input": {
+        "type": "源代码 + 任务清单",
+        "paths": [
+          "src/**",
+          "spec-dev/{requirement_desc_abstract}/tasks/tasks.md",
+          "spec-dev/{requirement_desc_abstract}/spec/"
+        ],
+        "example": "对src/中的源代码进行全面测试和验证"
+      },
+      "output": {
+        "paths": [
+          "tests/** (生成的测试代码)",
+          "spec-dev/{requirement_desc_abstract}/testing/"
+        ],
+        "files": [
+          "testing-report.md (测试报告，包括测试覆盖率、闭环验证结果)"
+        ]
+      },
+      "previous_skill": "code-execute",
+      "next_skill": null,
+      "dependencies": ["code-execute", "code-task"],
+      "key_features": [
+        "静态代码分析（Lint、TypeScript strict）",
+        "单元测试设计和执行（覆盖率 ≥ 80%）",
+        "集成测试验证",
+        "E2E测试覆盖关键流程",
+        "闭环验证（Task-代码-测试完全对应）"
+      ]
+    }
+  ],
+  "workflow": {
+    "description": "完整的5阶段SDD工作流",
+    "flow": [
+      {
+        "step": 1,
+        "name": "Spec阶段",
+        "skill": "spec-creation",
+        "input": "需求描述",
+        "output": "spec-dev/{requirement_desc_abstract}/spec/",
+        "purpose": "定义BDD格式的需求规范和业务规则"
+      },
+      {
+        "step": 2,
+        "name": "Design阶段",
+        "skill": "code-designer",
+        "input": "spec-dev/{requirement_desc_abstract}/spec/",
+        "output": "spec-dev/{requirement_desc_abstract}/design/",
+        "purpose": "进行架构设计和技术方案规划"
+      },
+      {
+        "step": 3,
+        "name": "Task阶段",
+        "skill": "code-task",
+        "input": "spec-dev/{requirement_desc_abstract}/design/",
+        "output": "spec-dev/{requirement_desc_abstract}/tasks/",
+        "purpose": "分解设计为具体的编码任务"
+      },
+      {
+        "step": 4,
+        "name": "Execute阶段",
+        "skill": "code-execute",
+        "input": "spec-dev/{requirement_desc_abstract}/tasks/",
+        "output": "src/ + spec-dev/{requirement_desc_abstract}/execution/",
+        "purpose": "执行任务生成高质量源代码"
+      },
+      {
+        "step": 5,
+        "name": "Test阶段",
+        "skill": "code-test",
+        "input": "src/ + spec-dev/{requirement_desc_abstract}/",
+        "output": "tests/ + spec-dev/{requirement_desc_abstract}/testing/",
+        "purpose": "完整的测试验证和闭环检查"
+      }
+    ]
+  }
+}
