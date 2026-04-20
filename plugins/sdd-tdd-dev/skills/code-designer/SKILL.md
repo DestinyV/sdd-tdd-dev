@@ -16,8 +16,23 @@ description: |
   - 微服务：服务边界、通信协议、数据流、部署方案
   - 移动应用：跨平台方案、离线支持、同步机制、性能优化
   
-  前置Skill：spec-creation ✓
-  下一步：/code-task
+## 何时使用
+
+**前置条件**：
+- ✅ spec-creation 已完成，规范已生成
+- ✅ 标准模式：需要独立设计文档
+- ⚠️ **快速模式**：如果用户启用了快速模式，code-designer 跳过。设计决策直接内联到 spec 的 scenarios 中。
+
+### 快速模式下的行为
+
+当 spec 标注为快速模式时：
+- code-designer **不执行**
+- 设计决策由 spec-creation 在生成场景时一并内联到 scenarios 中
+- 每个 scenario 增加"设计决策"字段，说明：
+  - 组件/模块结构选择
+  - 关键实现决策及原因
+  - 样式/交互方案
+- 简短（2-5 句话），不生成独立的 design.md
 ---
 
 # code-designer

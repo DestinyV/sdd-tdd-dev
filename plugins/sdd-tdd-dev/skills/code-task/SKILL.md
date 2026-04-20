@@ -42,6 +42,15 @@ description: |
 - ✅ code-designer 已完成，design.md 已生成且确认
 - ✅ 所有设计决策已明确
 - ✅ 关键的 TODO 项都已澄清
+- ⚠️ **快速模式**：code-task 跳过。任务拆解由 code-execute 在内存中完成。
+
+### 快速模式下的行为
+
+当 spec 标注为快速模式时：
+- code-task **不执行**
+- code-execute 直接读取 spec，在内存中自主拆解实现步骤
+- 不生成 tasks.md 文档
+- 任务拆解的逻辑记录在执行报告的"自主拆解"章节中
 
 ---
 

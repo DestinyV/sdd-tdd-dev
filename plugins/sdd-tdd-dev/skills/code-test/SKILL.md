@@ -37,8 +37,25 @@ description: |
 
 **前置条件**：
 - ✅ code-execute 已完成，所有Task都通过了规范和质量审查
-- ✅ code-task 已完成，任务列表已明确
+- ✅ code-task 已完成，任务列表已明确（标准模式）
 - ✅ 所有源代码已生成且编译通过
+- ✅ **快速模式**：code-execute 已通过质量审查（跳过规范审查和 task）
+
+### 快速模式执行（当 spec 标注为快速模式时）
+
+在快速模式下，code-test 执行以下精简流程：
+
+1. **步骤1**：代码质量静态分析（Lint + TypeScript）—— 保持不变
+2. **步骤2**：代码审查 —— 只做质量审查（跳过规范审查）
+3. **步骤3**：高层测试 —— 精简范围：
+   - ✅ 执行：集成测试（3.1）
+   - ✅ 执行：浏览器 E2E 测试（3.2）
+   - ⚡ 跳过：视觉回归测试（3.3）
+   - ⚡ 跳过：组件 UI 测试（3.4）
+   - ⚡ 跳过：MCP Browser 测试（3.5）
+   - ⚡ 跳过：性能测试（3.6）
+4. **步骤4**：闭环验证 —— 保持不变
+5. **步骤5**：生成精简测试报告（只包含实际执行的测试类型）
 
 ---
 
@@ -300,6 +317,8 @@ npm run test:performance
 | `references/frontend-browser-testing.md` | ⭐ 前端浏览器测试完整指南（E2E、视觉回归、组件UI、MCP Browser） |
 | `references/e2e-test-prompt.md` | E2E测试设计指南（已更新链接到新模板） |
 | `references/performance-test-prompt.md` | 性能测试设计指南 |
+| `references/pressure-scenarios/` | ⭐ Skill 压力测试场景定义（验证 Skill 在压力下的有效性） |
+| `references/using-superpowers/` | ⭐ 多平台适配引用文档（Copilot/Codex/Gemini/OpenCode 工具映射） |
 | `templates/playwright.config.ts` | ⭐ Playwright 配置模板（E2E + 视觉回归） |
 | `templates/browser-test-helpers.ts` | ⭐ 浏览器测试工具函数库 |
 | `templates/frontend-e2e-test.template.ts` | ⭐ E2E 测试代码模板 |
