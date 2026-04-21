@@ -1,509 +1,549 @@
-# sdd-tdd-dev-plugin 全栈SDD-TDD开发工作流
+# sdd-tdd-dev-plugin Full-Stack SDD-TDD Development Workflow
 
-[English](./README_EN.md) | 中文
+[中文](./README_ZH.md) | English
 
 ![overview](./docs/img/overview.png)
 
-**快速导航**：
-- 📖 [使用指南](./docs/USAGE.md) - 详细的使用场景和步骤
-- 🛠️ [最佳实践](./docs/BEST_PRACTICES.md) - 核心原则和最佳做法
-- 📚 [完整案例](./docs/使用案例.md) - 真实项目案例
-- 💻 [Skills详细文档](./skills/README.md) - 6个Skills的工作流
-- 🔧 [安装说明](./docs/INSTALLATION.md) - 安装和故障排查
-- 🏗️ [技术指南](./CLAUDE.md) - Claude工作指南（架构和设计原则）
-- 🔀 **[Git-Worktrees指南](./skills/code-execute/git-worktrees-guide.md)** - code-execute隔离工作环境指南
-- ⚡ **[Worktrees快速参考](./skills/code-execute/QUICK_REFERENCE.md)** - 日常使用快速查询卡片
+**Quick Navigation**:
+- 📖 [Usage Guide](./docs/USAGE_EN.md) - Detailed usage scenarios and steps
+- 🛠️ [Best Practices](./docs/BEST_PRACTICES_EN.md) - Core principles and best practices
+- 📚 [Complete Case Studies](./docs/USAGE.md) - Real project case studies
+- 💻 [Skills Documentation](./skills/README_EN.md) - 6 Skills workflow documentation
+- 🔧 [Installation Guide](./docs/INSTALLATION_EN.md) - Installation and troubleshooting
+- 🏗️ [Technical Guide](./CLAUDE.md) - Claude architecture and design principles
+- 🔀 **[Git-Worktrees Guide](./skills/code-execute/git-worktrees-guide.md)** - code-execute isolated work environment guide
+- ⚡ **[Worktrees Quick Reference](./skills/code-execute/QUICK_REFERENCE.md)** - Daily use quick reference card
 
-## 📌 概述
+## 📌 Overview
 
-**sdd-dev-plugin** 是一个企业级Claude Code插件，提供AI辅助开发的**完整全栈工作流**。通过6个专业的skills，帮助团队快速建立规范框架、进行设计规划、分解任务、生成代码、验证功能、归档规范。支持前端、后端、数据库、移动、微服务等多类型项目。
+**sdd-dev-plugin** is an enterprise-grade Claude Code plugin providing a **complete full-stack development workflow** with AI assistance. Through 6 professional skills, it helps teams quickly establish specification frameworks, conduct design planning, decompose tasks, generate code, verify functionality, and archive specifications. Supports frontend, backend, database, mobile, microservices, and other project types.
 
-**工作流**：
+**Workflow**:
 ```
-需求 → /spec-creation (规范) → /code-designer (设计) → /code-task (任务) → /code-execute (编码) → /code-test (测试) → /spec-archive (归档) → 完成
+Requirements → /spec-creation (Spec) → /code-designer (Design) → /code-task (Task) → /code-execute (Coding) → /code-test (Testing) → /spec-archive (Archive) → Complete
 ```
 
 ---
 
-## ✨ 核心特性
+## ✨ Core Features
 
-### 🎯 规范驱动开发（SDD）
-- ✅ 定义全栈设计规范和参考实现（前端、后端、数据库等）
-- ✅ 参考实现作为架构和代码标准
-- ✅ AI根据规范生成设计和代码
-- ✅ 支持多种技术栈（React/Vue、Node.js/Python/Go/Java、PostgreSQL/MongoDB等）
+### 🎯 Spec-Driven Development (SDD)
+- ✅ Define full-stack design specifications and reference implementations (frontend, backend, database, etc.)
+- ✅ Reference implementations serve as architecture and code standards
+- ✅ AI generates designs and code based on specifications
+- ✅ Supports multiple tech stacks (React/Vue, Node.js/Python/Go/Java, PostgreSQL/MongoDB, etc.)
 
-### 📋 完整工作流
-- ✅ **Spec阶段**：定义设计规范
-- ✅ **Design阶段**：需求分析 + 方案设计
-- ✅ **Task阶段**：任务分解 + 清单定义
-- ✅ **Execute阶段**：代码生成 + 多阶段审查
-- ✅ **Test阶段**：测试生成 + 闭环验证
+### 📋 Complete Workflow
+- ✅ **Spec Stage**: Define design specifications
+- ✅ **Design Stage**: Requirements analysis + solution design
+- ✅ **Task Stage**: Task decomposition + checklist definition
+- ✅ **Execute Stage**: Code generation + multi-stage review
+- ✅ **Test Stage**: Test generation + closed-loop verification
 
-### 🔄 质量保证机制
-- ✅ 规范审查：确保代码符合规范
-- ✅ 质量审查：确保代码质量
-- ✅ TDD实现：RED-GREEN-REFACTOR-REVIEW四阶段TDD流程
-- ✅ 测试覆盖：单元测试≥80%，集成/E2E/性能测试全覆盖
-- ✅ 闭环验证：确保TEST-VERIFY→Test→Code→Result完全对应
+### 🔄 Quality Assurance Mechanisms
+- ✅ Spec Review: Ensure code conforms to specifications
+- ✅ Quality Review: Ensure code quality standards
+- ✅ TDD Implementation: RED-GREEN-REFACTOR-REVIEW four-stage TDD process
+- ✅ Test Coverage: Unit tests ≥80%, full integration/E2E/performance testing
+- ✅ Closed-Loop Verification: Ensure TEST-VERIFY→Test→Code→Result complete correspondence
 
-### ⚡ 立即可用
-- ✅ 交互式问卷引导（支持多种技术栈选择）
-- ✅ 自动生成设计规范和任务清单
-- ✅ 详细的使用说明和最佳实践
-- ✅ 支持前端、后端、数据库、微服务等多类型项目
-
----
-
-## 📦 包含的6个Skills
-
-| Skill | 阶段 | 功能 | 输出 |
-|-------|------|------|------|
-| **spec-creation** | Spec | 需求分析和规范生成，输出BDD格式规范文档（WHEN-THEN格式） | spec-dev/{requirement_desc_abstract}/spec/ |
-| **code-designer** | Design | 根据规范进行代码设计规划，生成架构和技术方案 | spec-dev/{requirement_desc_abstract}/design/design.md |
-| **code-task** | Task | 将设计转换为代码级别任务列表，支持前后端、数据库、微服务任务 | spec-dev/{requirement_desc_abstract}/tasks/tasks.md |
-| **code-execute** | Execute | 通过子代理执行任务，支持多语言多框架，进行规范+质量两阶段审查，TDD流程保证单元测试。**v2.3.1+**：使用git-worktree为每个Task创建隔离工作环境，确保修复循环的安全性、可追踪性和可恢复性 | src/ + spec-dev/{requirement_desc_abstract}/execution/execution-report.md |
-| **code-test** | Test | 高层测试（集成/E2E/性能测试）和闭环验证 | tests/ + spec-dev/{requirement_desc_abstract}/testing/testing-report.md |
-| **spec-archive** | Archive | 规范归档和优化，将需求规范通过场景拆分合并到主规范中 | spec-dev/spec/ (已合并的主规范) |
-
-详细说明：[查看skills详细文档](./skills/README.md)
-
-## 🤖 核心Agents
-
-sdd-dev-plugin 包含5个专业的Agents，在各个Skills中协同工作：
-
-| Agent | 职责 | 应用场景 |
-|-------|------|--------|
-| **code-architect** | 通过分析现有代码库的模式和约定，设计功能架构并提供完整的实现蓝图 | 在code-designer阶段，分析项目结构、提取设计模式、规划架构 |
-| **code-explorer** | 通过追踪执行路径、映射架构层、识别设计模式，深入分析现有代码实现 | 在code-designer阶段（可选），深度理解相似功能的实现细节 |
-| **code-executor** | 根据详细的实现任务，逐个编写高质量代码并进行集成验证 | 在code-execute阶段，为每个Task分配独立实例并行实现 |
-| **code-reviewer** | 针对bug、逻辑错误、安全漏洞和代码质量进行审查 | 在code-execute和code-test阶段，进行规范和质量审查 |
-| **spec-archiver** | 规范归档专家，对标分析、冲突检测、智能合并，将规范沉淀到主规范库 | 在code-test阶段测试通过后，自动执行规范归档和优化 |
+### ⚡ Ready to Use
+- ✅ Interactive questionnaire guidance (supports multiple tech stack selection)
+- ✅ Automatic generation of design specifications and task checklists
+- ✅ Comprehensive usage instructions and best practices
+- ✅ Supports frontend, backend, database, microservices, and other project types
 
 ---
 
-## 🚀 快速开始
+## 📦 Included 6 Skills
 
-### 前置要求
-- Claude Code 已安装
+| Skill | Stage | Function | Output |
+|-------|-------|----------|--------|
+| **spec-creation** | Spec | Requirements analysis and spec generation, outputs BDD format spec documents (WHEN-THEN format) | spec-dev/{requirement_desc_abstract}/spec/ |
+| **code-designer** | Design | Code design planning based on specs, generates architecture and technical solutions | spec-dev/{requirement_desc_abstract}/design/design.md |
+| **code-task** | Task | Converts designs to code-level task lists, supports frontend, backend, database, microservice tasks | spec-dev/{requirement_desc_abstract}/tasks/tasks.md |
+| **code-execute** | Execute | Task execution via sub-agents, supports multi-language multi-framework, two-stage review (spec + quality), TDD process with unit tests. **v2.3.1+**: Uses git-worktree to create isolated work environments for each Task, ensuring safety, traceability, and recoverability of fix cycles | src/ + spec-dev/{requirement_desc_abstract}/execution/execution-report.md |
+| **code-test** | Test | High-level testing (Integration/E2E/Performance) and closed-loop verification | tests/ + spec-dev/{requirement_desc_abstract}/testing/testing-report.md |
+| **spec-archive** | Archive | Spec archiving and optimization, merges requirement specs into main spec library through scenario splitting | spec-dev/spec/ (merged main spec) |
 
-### 安装
+Detailed documentation: [View skills documentation](./skills/README_EN.md)
+
+## 🤖 Core Agents
+
+sdd-dev-plugin includes 5 professional Agents that collaborate across various Skills:
+
+| Agent | Responsibility | Use Cases |
+|-------|---------------|-----------|
+| **code-architect** | Analyzes existing codebase patterns and conventions to design functional architecture and provide complete implementation blueprints | code-designer stage: analyzes project structure, extracts design patterns, plans architecture |
+| **code-explorer** | Deep analysis of existing code implementations by tracing execution paths, mapping architecture layers, and identifying design patterns | code-designer stage (optional): deep understanding of similar feature implementation details |
+| **code-executor** | Writes high-quality code based on detailed implementation tasks and conducts integration verification | code-execute stage: assigns independent instances to each Task for parallel implementation |
+| **code-reviewer** | Reviews for bugs, logic errors, security vulnerabilities, and code quality issues | code-execute and code-test stages: conducts spec and quality reviews |
+| **spec-archiver** | Spec archiving expert, benchmark analysis, conflict detection, smart merging, accumulates specs into main spec library | After code-test passes: automatically executes spec archiving and optimization |
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Claude Code installed
+
+### Installation
 ```bash
-1、进入 Claude
-2、添加市场 /plugin -> Marketplaces -> +Add Marketplace ->
-3、粘贴 https://github.com/DestinyV/sdd-tdd-dev.git
-4、安装plugin 再进入 /plugin -> Marketplaces -> DestinyV-marketplace Enter选中 -> Browse plugins -> sdd-dev-plugin Enter安装
+1. Open Claude
+2. Add marketplace: /plugin -> Marketplaces -> +Add Marketplace ->
+3. Paste https://github.com/DestinyV/sdd-tdd-dev.git
+4. Install plugin: /plugin -> Marketplaces -> DestinyV-marketplace Enter to select -> Browse plugins -> sdd-dev-plugin Enter to install
 ```
 
-### 使用流程
+---
 
-#### 第0步：进入插件（用户操作）
+## 🌐 Multi-Platform Support
+
+The SDD+TDD workflow skills are designed to be **platform-agnostic**. While primarily developed for Claude Code, the workflow concepts and skill definitions can be adapted to multiple AI coding platforms:
+
+| Platform | Support Level | Notes |
+|----------|--------------|-------|
+| **Claude Code** | ✅ Full | Native skill support, full workflow |
+| **OpenAI Codex** | ✅ Adaptable | Skills via context injection; see [Codex Tools Mapping](./skills/using-superpowers/references/codex-tools.md) |
+| **GitHub Copilot CLI** | ✅ Adaptable | Skills via context injection; see [Copilot Tools Mapping](./skills/using-superpowers/references/copilot-tools.md) |
+| **Cursor** | ✅ Adaptable | Skill content can be loaded via context prompts |
+| **Gemini CLI** | ✅ Adaptable | Skills via context injection; see [Gemini Tools Mapping](./skills/using-superpowers/references/gemini-tools.md) |
+| **OpenCode** | ✅ Adaptable | Skills via context injection; see [OpenCode Tools Mapping](./skills/using-superpowers/references/opencode-tools.md) |
+
+### How Multi-Platform Works
+
+1. **Skill Format**: All skills are defined in standard Markdown (`.md`) files with clear instructions
+2. **Context Injection**: Skills can be injected as system prompts or context into any AI coding tool
+3. **Tool Mapping**: Reference the `using-superpowers/references/` directory for tool mappings between platforms
+4. **Workflow Portability**: The 6-stage workflow (Spec → Design → Task → Execute → Test → Archive) is tool-agnostic and can be manually executed on any platform
+
+### Using Skills on Other Platforms
+
+```
+# Example: Loading a skill context in any AI tool
+1. Read the SKILL.md file content
+2. Paste as system prompt or initial context
+3. Follow the workflow steps manually
+4. Reference tool mappings for platform-specific commands
+```
+
+### Platform-Specific Adaptations
+
+- **Claude Code**: Native `/skill` commands, automatic discovery
+- **Codex**: Use `spawn_agent` for sub-agent patterns, native skill discovery
+- **Copilot**: Use `task` for sub-agent patterns, context injection for skills
+- **Cursor**: Use chat context to load skill definitions
+- **Other platforms**: Paste skill content as initial context/system prompt
+
+For detailed tool mappings, see the `skills/using-superpowers/references/` directory.
+
+### Usage Workflow
+
+#### Step 0: Enter Plugin (User Action)
 
 ```bash
 /sdd-dev-plugin:sdd-dev
 
-根据提示输入需求内容
+Enter requirements as prompted
 ```
 
 ---
 
-#### 第1步：需求规范化（用户操作）
+#### Step 1: Requirements Specification (User Action)
 
 ```bash
 /spec-creation
 ```
 
-与插件进行交互式对话，进行需求分析和确认：
-1. 需求分析和初步拆解
-2. 场景细化和多轮确认
-3. 生成BDD格式规范
+Interactive dialogue with the plugin for requirements analysis and confirmation:
+1. Requirements analysis and initial decomposition
+2. Scenario refinement and multi-round confirmation
+3. Generate BDD format specifications
 
-生成结果：`spec-dev/{requirement_desc_abstract}/spec/` 目录
-- requirement.md (需求文档总览 - **入口文件**)
-- scenarios/*.md (BDD场景 - WHEN-THEN格式)
-- data-models.md (数据模型定义)
-- business-rules.md (业务规则和约束)
-- glossary.md (术语表)
-
----
-
-#### 第2-6步：自动执行（后续步骤自动执行，无需用户干预）
-
-规范确认后，后续步骤将**自动执行**：
-
-**第2步：代码设计** (自动)
-- 读取规范文档，分配code-architect分析项目
-- 生成设计方案：`spec-dev/{requirement_desc_abstract}/design/design.md`
-
-**第3步：任务列表** (自动)
-- 基于设计方案自动分解任务
-- 生成任务清单：`spec-dev/{requirement_desc_abstract}/tasks/tasks.md`
-
-**第4步：代码执行** (自动)
-- 为每个Task分配子代理并行实现
-- **v2.3.1+**：为每个Task创建独立git-worktree，隔离工作环境
-  - 编码和修复都在worktree中进行
-  - 修复失败可删除worktree重新开始
-  - worktree commit历史清晰记录修复过程
-  - 支持cherry-pick或squash merge两种提交方案
-- 进行多阶段审查（规范审查 + 质量审查）
-- 生成执行报告：`spec-dev/{requirement_desc_abstract}/execution/execution-report.md`
-- 输出源代码到 `src/` 目录
-
-**第5步：测试验证** (自动)
-- 进行代码质量审查和自动化测试
-- 生成测试报告和闭环验证矩阵
-- 生成测试报告：`spec-dev/{requirement_desc_abstract}/testing/testing-report.md`
-- 输出测试代码到 `tests/` 目录
-
-**第6步：规范归档** (自动)
-- 当所有测试通过后，自动触发规范归档流程
-- 分配spec-archiver进行对标分析和智能合并
-- 将需求规范通过场景拆分集成到主规范库
-- 生成归档报告：`spec-dev/spec/archive-report.md`
-- 更新主规范：`spec-dev/spec/` (data-models、business-rules、glossary等)
+Output: `spec-dev/{requirement_desc_abstract}/spec/` directory
+- requirement.md (Requirements document overview - **entry file**)
+- scenarios/*.md (BDD scenarios - WHEN-THEN format)
+- data-models.md (Data model definitions)
+- business-rules.md (Business rules and constraints)
+- glossary.md (Glossary)
 
 ---
 
-#### 整个工作流耗时估算
+#### Steps 2-6: Automatic Execution (No User Intervention Required)
 
-| 阶段 | 输入 | 输出 | 耗时 |
-|------|------|------|------|
-| Spec | 需求描述 | spec/ | 用户交互 |
-| Design | spec/ | design.md | 自动执行 |
-| Task | design.md | tasks.md | 自动执行 |
-| Execute | tasks.md | src/ + 执行报告 | 自动执行 |
-| Test | tasks.md | tests/ + 测试报告 | 自动执行 |
-| Archive | spec/ | spec-dev/spec/ + 归档报告 | 自动执行 |
+After spec confirmation, subsequent steps will **execute automatically**:
 
-总体耗时：规范化阶段取决于用户交互，后续全流程自动执行（通常2-5分钟）
+**Step 2: Code Design** (Automatic)
+- Reads spec documents, assigns code-architect to analyze project
+- Generates design solution: `spec-dev/{requirement_desc_abstract}/design/design.md`
+
+**Step 3: Task List** (Automatic)
+- Automatically decomposes tasks based on design solution
+- Generates task checklist: `spec-dev/{requirement_desc_abstract}/tasks/tasks.md`
+
+**Step 4: Code Execution** (Automatic)
+- Assigns sub-agents to each Task for parallel implementation
+- **v2.3.1+**: Creates independent git worktree for each Task, isolating work environments
+  - Coding and fixes all performed within worktree
+  - Failed fixes can delete worktree and restart
+  - Worktree commit history clearly records fix process
+  - Supports cherry-pick or squash merge submission approaches
+- Conducts multi-stage review (spec review + quality review)
+- Generates execution report: `spec-dev/{requirement_desc_abstract}/execution/execution-report.md`
+- Outputs source code to `src/` directory
+
+**Step 5: Test Verification** (Automatic)
+- Conducts code quality review and automated testing
+- Generates test reports and closed-loop verification matrix
+- Generates test report: `spec-dev/{requirement_desc_abstract}/testing/testing-report.md`
+- Outputs test code to `tests/` directory
+
+**Step 6: Spec Archiving** (Automatic)
+- Automatically triggers spec archiving process after all tests pass
+- Assigns spec-archiver for benchmark analysis and smart merging
+- Integrates requirement specs into main spec library through scenario splitting
+- Generates archive report: `spec-dev/spec/archive-report.md`
+- Updates main specs: `spec-dev/spec/` (data-models, business-rules, glossary, etc.)
 
 ---
 
-## 📖 完整文档
+#### Overall Workflow Time Estimation
 
-- [安装说明](./docs/INSTALLATION.md) - 详细的安装步骤和故障排查
-- [使用指南](./docs/USAGE.md) - 详细的使用方式和常见场景
-- [最佳实践](./docs/BEST_PRACTICES.md) - 全栈SDD最佳实践和检查清单
-- [完整案例](./docs/使用案例.md) - 真实项目案例（前端、后端、全栈等）
-- [架构设计](./docs/ARCHITECTURE.md) - 整体架构和技术细节
-- [常见问题](./docs/FAQ.md) - 常见问题和解决方案
-- [Skills详细说明](./skills/README.md) - 6个Skills的工作流和原则
-- **🆕 [完整TDD工作流](./docs/TDD_COMPLETE_WORKFLOW.md)** - Phase 1-3端到端TDD工作流指南 (5000+行)
-- **🆕 [TDD Phase 3示例](./docs/TDD_PHASE3_EXAMPLE.md)** - 集成、E2E、性能测试实例 (6000+行)
-- **🔀 [Git-Worktrees工作流指南](./skills/code-execute/git-worktrees-guide.md)** - code-execute隔离工作环境详细指南 (465行)
-- **⚡ [Git-Worktrees快速参考](./skills/code-execute/QUICK_REFERENCE.md)** - Worktree日常使用快速参考卡片
-- **📋 [实现总结文档](./IMPLEMENTATION_SUMMARY.md)** - Git-Worktrees能力落地总结
+| Stage | Input | Output | Time |
+|-------|-------|--------|------|
+| Spec | Requirements description | spec/ | User interaction |
+| Design | spec/ | design.md | Automatic |
+| Task | design.md | tasks.md | Automatic |
+| Execute | tasks.md | src/ + execution report | Automatic |
+| Test | tasks.md | tests/ + test report | Automatic |
+| Archive | spec/ | spec-dev/spec/ + archive report | Automatic |
+
+Total time: Specification stage depends on user interaction, subsequent full workflow executes automatically (typically 2-5 minutes)
 
 ---
 
-## 💡 使用示例
+## 📖 Complete Documentation
 
-### 场景1：React项目 - 新增订单表单
+- [Installation Guide](./docs/INSTALLATION_EN.md) - Detailed installation steps and troubleshooting
+- [Usage Guide](./docs/USAGE_EN.md) - Detailed usage methods and common scenarios
+- [Best Practices](./docs/BEST_PRACTICES_EN.md) - Full-stack SDD best practices and checklists
+- [Complete Case Studies](./docs/USAGE.md) - Real project cases
+- [Architecture Design](./docs/ARCHITECTURE.md) - Overall architecture and technical details
+- [FAQ](./docs/FAQ.md) - Common questions and solutions
+- [Skills Documentation](./skills/README_EN.md) - 6 Skills workflow and principles
+- **🆕 [Complete TDD Workflow](./docs/TDD_COMPLETE_WORKFLOW.md)** - Phase 1-3 end-to-end TDD guide (Chinese only, 5000+ lines)
+- **🆕 [TDD Phase 3 Examples](./docs/TDD_PHASE3_EXAMPLE.md)** - Integration, E2E, performance test examples (Chinese only, 6000+ lines)
+- **🔀 [Git-Worktrees Workflow Guide](./skills/code-execute/git-worktrees-guide.md)** - code-execute isolated work environment guide (465 lines)
+- **⚡ [Git-Worktrees Quick Reference](./skills/code-execute/QUICK_REFERENCE.md)** - Worktree daily use quick reference card
+- **📋 [Implementation Summary](./IMPLEMENTATION_SUMMARY.md)** - Git-Worktrees capability implementation summary
+
+---
+
+## 💡 Usage Examples
+
+### Scenario 1: React Project - New Order Form
 
 ```bash
-# 0. 进入插件
+# 0. Enter plugin
 /sdd-dev-plugin:sdd-dev
-# 输入需求：需要在订单管理系统中新增订单表单，支持搜索、排序、分页、批量操作
+# Input requirements: Need to add order form to order management system, supporting search, sort, pagination, batch operations
 
-# 1. 分析需求并生成规范文档
+# 1. Analyze requirements and generate spec
 /spec-creation
-# 输出：spec-dev/order-form/spec/ (requirement.md, scenarios/*.md, data-models.md等)
+# Output: spec-dev/order-form/spec/ (requirement.md, scenarios/*.md, data-models.md, etc.)
 
-# 2. 根据规范进行架构设计
-/code-designer 需要新增订单表单
-# 输出：spec-dev/order-form/design/design.md
+# 2. Architecture design based on spec
+/code-designer Need to add order form
+# Output: spec-dev/order-form/design/design.md
 
-# 3. 将设计分解为具体任务
+# 3. Decompose design into specific tasks
 /code-task spec-dev/order-form/design/design.md
-# 输出：spec-dev/order-form/tasks/tasks.md
+# Output: spec-dev/order-form/tasks/tasks.md
 
-# 4. 执行代码实现（带两阶段审查）
+# 4. Execute code implementation (with two-stage review)
 /code-execute spec-dev/order-form/tasks/tasks.md
-# 输出：src/... + spec-dev/order-form/execution/execution-report.md
+# Output: src/... + spec-dev/order-form/execution/execution-report.md
 
-# 5. 测试验证和闭环检查
+# 5. Test verification and closed-loop check
 /code-test spec-dev/order-form/tasks/tasks.md
-# 输出：tests/... + spec-dev/order-form/testing/testing-report.md
+# Output: tests/... + spec-dev/order-form/testing/testing-report.md
 ```
 
-### 场景2：Vue项目 - 新增仪表板组件
+### Scenario 2: Vue Project - New Dashboard Component
 
 ```bash
-# 0. 进入插件
+# 0. Enter plugin
 /sdd-dev-plugin:sdd-dev
-# 输入需求：需要创建数据仪表板，支持实时数据、多图表展示、自定义面板
+# Input requirements: Need to create data dashboard supporting real-time data, multi-chart display, custom panels
 
-# 1. 分析需求并生成规范文档
+# 1. Analyze requirements and generate spec
 /spec-creation
-# 输出：spec-dev/dashboard/spec/ (requirement.md, scenarios/*.md等)
+# Output: spec-dev/dashboard/spec/ (requirement.md, scenarios/*.md, etc.)
 
-# 2. 根据规范进行架构设计
-/code-designer 需要创建数据仪表板
-# 输出：spec-dev/dashboard/design/design.md
+# 2. Architecture design based on spec
+/code-designer Need to create data dashboard
+# Output: spec-dev/dashboard/design/design.md
 
-# 3. 将设计分解为具体任务
+# 3. Decompose design into specific tasks
 /code-task spec-dev/dashboard/design/design.md
-# 输出：spec-dev/dashboard/tasks/tasks.md
+# Output: spec-dev/dashboard/tasks/tasks.md
 
-# 4. 执行代码实现
+# 4. Execute code implementation
 /code-execute spec-dev/dashboard/tasks/tasks.md
-# 输出：src/... + spec-dev/dashboard/execution/execution-report.md
+# Output: src/... + spec-dev/dashboard/execution/execution-report.md
 
-# 5. 测试验证和闭环检查
+# 5. Test verification and closed-loop check
 /code-test spec-dev/dashboard/tasks/tasks.md
-# 输出：tests/... + spec-dev/dashboard/testing/testing-report.md
+# Output: tests/... + spec-dev/dashboard/testing/testing-report.md
 ```
 
 ---
 
-## 🎯 工作流程图
+## 🎯 Workflow Diagram
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│  Step 0: /sdd-dev-plugin:sdd-dev 进入插件               │
-│  - 根据提示输入需求内容                                  │
+│  Step 0: /sdd-dev-plugin:sdd-dev Enter plugin            │
+│  - Enter requirements as prompted                        │
 └────────────────┬─────────────────────────────────────────┘
                  │
                  ↓
 ┌──────────────────────────────────────────────────────────┐
-│  Step 1: /spec-creation 需求分析和规范生成              │
-│  - 分析需求和初步拆解                                    │
-│  - 场景细化和多轮确认                                    │
-│  - 输出：spec-dev/{name}/spec/                          │
-│    (requirement.md, scenarios/*.md, data-models.md等)   │
+│  Step 1: /spec-creation Requirements Analysis & Spec      │
+│  - Analyze requirements and initial decomposition        │
+│  - Scenario refinement and multi-round confirmation      │
+│  - Output: spec-dev/{name}/spec/                          │
+│    (requirement.md, scenarios/*.md, data-models.md, etc.) │
 └────────────────┬─────────────────────────────────────────┘
                  │
                  ↓
 ┌──────────────────────────────────────────────────────────┐
-│  Step 2: /code-designer 架构和技术设计                  │
-│  - 分配code-architect分析项目模式                       │
-│  - 进行架构设计和技术方案规划                             │
-│  - 输出：spec-dev/{name}/design/design.md              │
+│  Step 2: /code-designer Architecture & Technical Design   │
+│  - Assign code-architect to analyze project patterns     │
+│  - Conduct architecture design and technical planning    │
+│  - Output: spec-dev/{name}/design/design.md               │
 └────────────────┬─────────────────────────────────────────┘
                  │
                  ↓
 ┌──────────────────────────────────────────────────────────┐
-│  Step 3: /code-task 任务分解和定义                       │
-│  - 将设计方案分解为编码任务                               │
-│  - 定义每个Task的目标、交付物、验收标准                   │
-│  - 输出：spec-dev/{name}/tasks/tasks.md                 │
+│  Step 3: /code-task Task Decomposition & Definition       │
+│  - Decompose design into coding tasks                     │
+│  - Define goals, deliverables, acceptance criteria        │
+│  - Output: spec-dev/{name}/tasks/tasks.md                 │
 └────────────────┬─────────────────────────────────────────┘
                  │
                  ↓
 ┌──────────────────────────────────────────────────────────┐
-│  🔍 用户审查和确认                                        │
-│  - 审查设计方案和任务列表                                 │
-│  - 确认无误后进入Execute阶段                             │
+│  🔍 User Review and Confirmation                          │
+│  - Review design solution and task list                   │
+│  - Confirm and proceed to Execute stage                   │
 └────────────────┬─────────────────────────────────────────┘
                  │
                  ↓
 ┌──────────────────────────────────────────────────────────┐
-│  Step 4: /code-execute 代码实现和多阶段审查             │
-│  - 为每个Task分配code-executor子代理                    │
-│  - **v2.3.1+**：创建git-worktree隔离工作环境           │
-│    • 编码和修复在worktree中进行                        │
-│    • 每次修复作为独立commit便于追踪                     │
-│    • 修复完成后cherry-pick/squash merge到main          │
-│    • 清理worktree释放资源                              │
-│  - 规范审查：验证代码符合design.md                      │
-│  - 质量审查：检查代码质量和类型安全                       │
-│  - 输出：src/ + execution-report.md                    │
+│  Step 4: /code-execute Code Implementation & Review       │
+│  - Assign code-executor sub-agents for each Task          │
+│  - **v2.3.1+**: Create git-worktree isolated environments │
+│    • Coding and fixes performed in worktree              │
+│    • Each fix as independent commit for tracking          │
+│    • Cherry-pick/squash merge to main after completion   │
+│    • Clean up worktree to free resources                  │
+│  - Spec review: Verify code conforms to design.md         │
+│  - Quality review: Check code quality and type safety     │
+│  - Output: src/ + execution-report.md                     │
 └────────────────┬─────────────────────────────────────────┘
                  │
                  ↓
 ┌──────────────────────────────────────────────────────────┐
-│  Step 5: /code-test 测试和闭环验证                       │
-│  - 代码质量审查（Lint、TypeScript strict check）        │
-│  - 设计和执行单元、集成、E2E测试                         │
-│  - 闭环验证（Task-代码-测试对应）                        │
-│  - 输出：tests/ + testing-report.md                    │
+│  Step 5: /code-test Testing & Closed-Loop Verification    │
+│  - Code quality review (Lint, TypeScript strict check)    │
+│  - Design and execute unit, integration, E2E tests        │
+│  - Closed-loop verification (Task-Code-Test correspondence)│
+│  - Output: tests/ + testing-report.md                     │
 └────────────────┬─────────────────────────────────────────┘
                  │
-      ✅ 所有测试通过，自动触发
+      ✅ All tests pass, automatically triggers
                  │
                  ↓
 ┌──────────────────────────────────────────────────────────┐
-│  Step 6: /spec-archive 规范归档和优化                    │
-│  - 分配spec-archiver进行规范对标分析                    │
-│  - 通过场景拆分和智能合并集成到主规范                     │
-│  - 冲突检测和决策处理                                    │
-│  - 输出：spec-dev/spec/ + archive-report.md            │
+│  Step 6: /spec-archive Spec Archiving & Optimization      │
+│  - Assign spec-archiver for spec benchmark analysis       │
+│  - Integrate into main spec through scenario splitting    │
+│  - Conflict detection and decision handling               │
+│  - Output: spec-dev/spec/ + archive-report.md             │
 └────────────────┬─────────────────────────────────────────┘
                  │
                  ↓
 ┌──────────────────────────────────────────────────────────┐
-│  ✅ 完全完成！                                            │
-│  - 代码质量达标，可以上线                                │
-│  - 规范已沉淀到企业级规范库                               │
-│  - 可用于后续需求的参考和对标                             │
+│  ✅ Complete!                                             │
+│  - Code quality meets standards, ready for release        │
+│  - Specs accumulated to enterprise spec library           │
+│  - Available for future requirement reference             │
 └──────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 📊 核心原则
+## 📊 Core Principles
 
-### ✅ 必须做
-- 第0步：使用 `/sdd-dev-plugin:sdd-dev` 进入插件输入需求
-- 第1步：运行spec-creation进行需求分析和规范生成
-- 第2步：在code-designer阶段分配code-architect进行架构设计
-- 第3步：在code-task阶段进行任务分解和定义
-- 第4步：遵循任务清单严格执行code-execute，完成规范+质量两阶段审查
-- 第5步：进行完整的测试验证和闭环检查
-- 第6步：测试通过后自动执行spec-archive，将规范沉淀到企业级规范库
+### ✅ Must Do
+- Step 0: Use `/sdd-dev-plugin:sdd-dev` to enter plugin and input requirements
+- Step 1: Run spec-creation for requirements analysis and spec generation
+- Step 2: Assign code-architect for architecture design in code-designer stage
+- Step 3: Conduct task decomposition and definition in code-task stage
+- Step 4: Strictly follow task checklist for code-execute, complete spec + quality two-stage review
+- Step 5: Conduct comprehensive test verification and closed-loop check
+- Step 6: Automatically execute spec-archive after tests pass, accumulate specs to enterprise spec library
 
-### ❌ 不能做
-- 跳过第0步直接调用各个Skill（应该通过插件入口）
-- 跳过设计和任务定义阶段直接进行编码
-- 在code-execute中跳过规范或质量审查
-- 修改生成的源代码逻辑来让测试通过
-- 忽视Task和代码之间的一致性
-- 跳过code-test阶段的闭环验证
-- 跳过规范归档流程，导致规范库无法完善和沉淀
-
----
-
-## 🤝 如何定制工作流
-
-Skill可能和项目存在上下文、背景、依赖的绑定，所以，这套skill可能不是很适配你的场景。
-
-### 调整设计和规范
-
-修改以下Skill的SKILL.md文件，让其适应你的项目需求：
-
-1. **spec-creation** - 定义项目的设计模式和参考组件收集方式
-2. **code-designer** - 调整设计分析的维度和深度
-3. **code-task** - 调整任务分解的粒度和验收标准
-
-### 调整执行和审查
-
-修改code-execute中的提示词文件：
-
-- `implementer-prompt.md` - 调整代码实现的风格和要求
-- `spec-reviewer-prompt.md` - 调整规范审查的维度
-- `code-quality-reviewer-prompt.md` - 调整代码质量标准
-
-### 调整测试策略
-
-修改code-test的SKILL.md文件：
-
-- 调整测试框架和工具
-- 调整测试覆盖率要求
-- 调整闭环验证的标准
+### ❌ Must Not Do
+- Skip Step 0 and directly call individual Skills (should use plugin entry)
+- Skip design and task definition stages and directly code
+- Skip spec or quality reviews in code-execute
+- Modify source code logic to make tests pass
+- Ignore consistency between Tasks and code
+- Skip closed-loop verification in code-test stage
+- Skip spec archiving process, preventing spec library improvement
 
 ---
 
-## 📝 更新日志
+## 🤝 How to Customize Workflow
 
-### v2.3.1 (2026-03-23) ✨ Git-Worktrees隔离工作环境
-- ✅ **Worktree隔离机制** - 为code-execute每个Task创建独立git-worktree
-- ✅ **安全修复循环** - 修复失败可删除worktree重新开始，不污染main分支
-- ✅ **完整修复历史** - worktree commit清晰记录"问题→修复→验证"链条
-- ✅ **并行Task支持** - 多Task同时执行无git冲突风险
-- ✅ **Worktree指南** - 新增465行完整的Worktree工作流指南（git-worktrees-guide.md）
-- ✅ **快速参考卡** - QUICK_REFERENCE.md便于日常使用和查询
-- ✅ **落地总结文档** - IMPLEMENTATION_SUMMARY.md展示改进全貌
-- ✅ **约束更新** - 新增8条关键约束 + 新增4条危险信号
+Skills may have context, background, or dependency bindings with projects, so this suite of skills may not perfectly fit your scenario.
 
-### v2.3.0 (2026-03-23) ✨ TDD完整实现
-- ✅ **TDD实现体系** - 完成Phase 2 TDD实现阶段（RED-GREEN-REFACTOR-REVIEW）
-- ✅ **高层测试体系** - 完成Phase 3 集成、E2E、性能测试优化
-- ✅ **职责清晰化** - code-execute处理单元测试，code-test处理高层测试
-- ✅ **完整文档** - TDD_COMPLETE_WORKFLOW.md (5000+行) + TDD_PHASE3_EXAMPLE.md (6000+行)
-- ✅ **高层测试prompt** - 集成、E2E、性能测试专项设计指南 (2000+行)
-- ✅ **最佳实践更新** - BEST_PRACTICES.md新增Phase 3最佳实践
-- ✅ **闭环验证完善** - TEST-VERIFY→Test→Code→Result完整链条
+### Adjust Design and Specifications
+
+Modify the SKILL.md files in the following Skills to adapt to your project requirements:
+
+1. **spec-creation** - Define project design patterns and reference component collection methods
+2. **code-designer** - Adjust design analysis dimensions and depth
+3. **code-task** - Adjust task decomposition granularity and acceptance criteria
+
+### Adjust Execution and Review
+
+Modify prompt files in code-execute:
+
+- `implementer-prompt.md` - Adjust code implementation style and requirements
+- `spec-reviewer-prompt.md` - Adjust spec review dimensions
+- `code-quality-reviewer-prompt.md` - Adjust code quality standards
+
+### Adjust Testing Strategy
+
+Modify code-test SKILL.md:
+
+- Adjust test frameworks and tools
+- Adjust test coverage requirements
+- Adjust closed-loop verification standards
+
+---
+
+## 📝 Changelog
+
+### v2.3.1 (2026-03-23) ✨ Git-Worktrees Isolated Work Environments
+- ✅ **Worktree Isolation Mechanism** - Creates independent git worktree for each Task in code-execute
+- ✅ **Safe Fix Cycle** - Failed fixes can delete worktree and restart without polluting main branch
+- ✅ **Complete Fix History** - Worktree commits clearly record "problem→fix→verification" chain
+- ✅ **Parallel Task Support** - Multiple Tasks execute simultaneously without git conflict risk
+- ✅ **Worktree Guide** - New 465-line complete Worktree workflow guide (git-worktrees-guide.md)
+- ✅ **Quick Reference Card** - QUICK_REFERENCE.md for daily use and reference
+- ✅ **Implementation Summary** - IMPLEMENTATION_SUMMARY.md shows full scope of improvements
+- ✅ **Constraint Updates** - New 8 key constraints + new 4 danger signals
+
+### v2.3.0 (2026-03-23) ✨ Complete TDD Implementation
+- ✅ **TDD Implementation System** - Complete Phase 2 TDD implementation (RED-GREEN-REFACTOR-REVIEW)
+- ✅ **High-Level Testing System** - Complete Phase 3 integration, E2E, performance testing optimization
+- ✅ **Clear Responsibilities** - code-execute handles unit tests, code-test handles high-level tests
+- ✅ **Complete Documentation** - TDD_COMPLETE_WORKFLOW.md (5000+ lines) + TDD_PHASE3_EXAMPLE.md (6000+ lines)
+- ✅ **High-Level Test Prompts** - Integration, E2E, performance test specialized design guides (2000+ lines)
+- ✅ **Best Practices Update** - BEST_PRACTICES.md adds Phase 3 best practices
+- ✅ **Closed-Loop Verification** - Complete TEST-VERIFY→Test→Code→Result chain
 
 ### v2.2.0 (2026-03-20)
-- ✅ **规范归档流程** - 新增spec-archive技能和spec-archiver Agent
-- ✅ **规范沉淀机制** - 将验证通过的需求规范自动归档到企业级主规范库
-- ✅ **场景拆分合并** - 支持通过场景拆分和智能合并策略集成新规范
-- ✅ **冲突检测机制** - 自动检测和处理规范冲突，提供决策建议
-- ✅ **规范对标分析** - 新增场景、数据模型、业务规则、术语的对标分析
-- ✅ **版本管理** - 支持规范版本追踪和演进历史记录
+- ✅ **Spec Archiving** - New spec-archive skill and spec-archiver Agent
+- ✅ **Spec Accumulation** - Automatically archive verified requirement specs to enterprise main spec library
+- ✅ **Scenario Splitting** - Support integration of new specs through scenario splitting and smart merging
+- ✅ **Conflict Detection** - Automatic detection and handling of spec conflicts with decision suggestions
+- ✅ **Spec Benchmark Analysis** - New benchmark analysis for scenarios, data models, business rules, terminology
+- ✅ **Version Management** - Support spec version tracking and evolution history
 
 ### v2.1.0 (2026-03-10)
-- ✅ 全栈开发能力扩展
-- ✅ 支持前端、后端、数据库、微服务、移动端等多类型项目
-- ✅ 技术栈扩展：Node.js、Python、Go、Java、PostgreSQL、MongoDB等
-- ✅ 数据库设计：SQL/NoSQL 数据模型设计和迁移脚本
-- ✅ API设计：REST/GraphQL API 规范和验证
-- ✅ 微服务支持：服务边界、通信协议、部署方案
-- ✅ 多框架测试：Jest、Pytest、JUnit、Cypress、k6等
-- ✅ 完整的全栈示例和最佳实践
+- ✅ **Full-Stack Development** - Extended support for frontend, backend, database, microservices, mobile
+- ✅ **Tech Stack Expansion** - Node.js, Python, Go, Java, PostgreSQL, MongoDB, etc.
+- ✅ **Database Design** - SQL/NoSQL data model design and migration scripts
+- ✅ **API Design** - REST/GraphQL API specifications and validation
+- ✅ **Microservices Support** - Service boundaries, communication protocols, deployment solutions
+- ✅ **Multi-Framework Testing** - Jest, Pytest, JUnit, Cypress, k6, etc.
+- ✅ **Complete Examples** - Full-stack examples and best practices
 
 ### v2.0.0 (2026-03-09)
-- ✅ 完全重构为 Spec-Design-Task-Execute-Test-Archive 工作流
-- ✅ 6个核心Skills：spec-creation、code-designer、code-task、code-execute、code-test、spec-archive
-- ✅ 多阶段审查机制和闭环验证
-- ✅ 前端优先支持（React/Vue/Angular/Svelte）
-- ✅ 完整的文档和最佳实践指南
+- ✅ Complete refactoring to Spec-Design-Task-Execute-Test-Archive workflow
+- ✅ 6 Core Skills: spec-creation, code-designer, code-task, code-execute, code-test, spec-archive
+- ✅ Multi-stage review mechanism and closed-loop verification
+- ✅ Frontend-first support (React/Vue/Angular/Svelte)
+- ✅ Complete documentation and best practices guides
 
 ### v1.0.0 (2026-02-09)
-- 初始版本，包含spec-generator、ai-planning、ai-code-execution、ai-test-creation
+- Initial version with spec-generator, ai-planning, ai-code-execution, ai-test-creation
 
 ---
 
-## 🎓 学习路径
+## 🎓 Learning Path
 
-### 新手入门
-1. 阅读本 README.md 理解整个工作流
-2. 查看 [使用指南](./docs/USAGE.md)
-3. 执行 `/sdd-dev-plugin:sdd-dev` 进入插件
-4. 根据提示输入需求内容
-5. 逐步执行 spec-creation → code-designer → code-task → code-execute → code-test → spec-archive
-6. 选择一个小功能进行完整流程试运行
+### Beginner
+1. Read this README.md to understand the entire workflow
+2. View [Usage Guide](./docs/USAGE_EN.md)
+3. Execute `/sdd-dev-plugin:sdd-dev` to enter plugin
+4. Enter requirements as prompted
+5. Step through spec-creation → code-designer → code-task → code-execute → code-test → spec-archive
+6. Choose a small feature for complete workflow trial run
 
-### 📚 深入学习
-1. 理解 [快速开始](#-快速开始) 中的6个步骤和5个Agents
-2. 阅读 [最佳实践](./docs/BEST_PRACTICES.md) 了解每个阶段的最佳做法
-3. 查看 [完整案例](./docs/使用案例.md) 学习真实项目案例
-4. **新增**：学习 [完整TDD工作流](./docs/TDD_COMPLETE_WORKFLOW.md) 理解Phase 1-3完整流程
-5. **新增**：查看 [TDD Phase 3示例](./docs/TDD_PHASE3_EXAMPLE.md) 了解集成、E2E、性能测试
-6. **v2.3.1+**：学习 [Git-Worktrees指南](./skills/code-execute/git-worktrees-guide.md) 掌握隔离工作环境机制
-   - 理解为什么需要worktree（隔离、安全、可追踪）
-   - 学习worktree的创建、编码、修复、合并、清理全流程
-   - 查看实际应用场景和并行Task管理
-   - 参考 [快速参考卡](./skills/code-execute/QUICK_REFERENCE.md) 进行日常查询
-7. 理解 [架构设计](./docs/ARCHITECTURE.md) 和工作流内部机制
-8. 学习spec-archive规范归档的对标分析、冲突检测、智能合并机制
-9. 学习如何 [定制工作流](#如何定制工作流)
+### 📚 Advanced Learning
+1. Understand the 6 steps and 5 Agents in [Quick Start](#-quick-start)
+2. Read [Best Practices](./docs/BEST_PRACTICES_EN.md) to learn best practices for each stage
+3. View [Complete Case Studies](./docs/USAGE.md) to learn from real projects
+4. **New**: Learn [Complete TDD Workflow](./docs/TDD_COMPLETE_WORKFLOW.md) to understand Phase 1-3 process
+5. **New**: View [TDD Phase 3 Examples](./docs/TDD_PHASE3_EXAMPLE.md) for integration, E2E, performance testing
+6. **v2.3.1+**: Learn [Git-Worktrees Guide](./skills/code-execute/git-worktrees-guide.md) to master isolated work environments
+   - Understand why worktrees are needed (isolation, safety, traceability)
+   - Learn worktree creation, coding, fixing, merging, cleanup lifecycle
+   - View real application scenarios and parallel Task management
+   - Reference [Quick Reference Card](./skills/code-execute/QUICK_REFERENCE.md) for daily queries
+7. Understand [Architecture Design](./docs/ARCHITECTURE.md) and workflow internal mechanisms
+8. Learn spec-archive benchmark analysis, conflict detection, smart merging mechanisms
+9. Learn how to [customize workflow](#how-to-customize-workflow)
 
-### 团队推广
-1. 确保团队成员理解SDD工作流的核心原则
-2. 为项目编写定制化的设计规范（通过spec-creation）
-3. 编写团队的最佳实践和编码风格指南
-4. 配置code-execute和code-test的审查规则
-5. 培训团队成员按照规范使用整个工作流
-6. 建立基于spec-design的代码审查流程
-
----
-
-## 📧 联系方式
-
-- 📖 [文档](./docs/)
-- 🐛 [问题反馈](https://github.com/your-org/sdd-dev-plugin/issues)
-- 💬 [讨论交流](https://github.com/your-org/sdd-dev-plugin/discussions)
+### Team Adoption
+1. Ensure team members understand SDD workflow core principles
+2. Write project-specific design specs (through spec-creation)
+3. Write team best practices and coding style guides
+4. Configure code-execute and code-test review rules
+5. Train team members to use the entire workflow according to specs
+6. Establish spec-design based code review process
 
 ---
 
-## 📄 许可证
+## 📧 Contact
 
-MIT License - 详见 [LICENSE](./LICENSE)
-
----
-
-## 🙏 致谢
-
-这个工作流是基于SDD（Spec-Driven Development）原则，结合了：
-- Claude Code的AI能力
-- 企业级开发的最佳实践
-- 前端工程化的经验教训
-
-感谢所有贡献者和用户的支持！
+- 📖 [Documentation](./docs/)
+- 🐛 [Bug Reports](https://github.com/your-org/sdd-tdd-dev-plugin/issues)
+- 💬 [Discussions](https://github.com/your-org/sdd-tdd-dev-plugin/discussions)
 
 ---
 
-**让AI辅助的全栈开发变得规范、高效、可信赖！** 🚀
+## 📄 License
 
+MIT License - See [LICENSE](./LICENSE)
+
+---
+
+## 🙏 Acknowledgments
+
+This workflow is based on SDD (Spec-Driven Development) principles, combined with:
+- Claude Code's AI capabilities
+- Enterprise development best practices
+- Frontend engineering lessons learned
+
+Thanks to all contributors and users for their support!
+
+---
+
+**Make AI-assisted full-stack development standardized, efficient, and reliable!** 🚀
