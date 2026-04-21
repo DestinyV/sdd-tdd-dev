@@ -2,6 +2,53 @@
 
 所有重要的项目更新将在此文档中记录。
 
+## [2.5.0] - 2026-04-21
+
+### 新增 - 六大强制约束增强
+
+#### 1. HARD-GATE 拦截点
+- 在 code-execute 关键节点增加硬拦截机制
+- 测试框架可用性确认（无测试框架时 AskUserQuestion 暂停）
+- 测试文件存在性检查（standard 模式下无测试文件不允许编码）
+- 工作模式最终确认（AskUserQuestion 三选一）
+
+#### 2. 子代理派遣强制化
+- standard 模式下必须使用 `Agent(subagent_type="sdd-tdd-dev:code-executor")` 工具
+- 提供具体的工具调用模板
+- 快速模式可选子代理或直接主上下文执行
+
+#### 3. TDD 状态追踪机制
+- 每个 Task 必须输出 TDD 四阶段日志（RED→GREEN→REFACTOR→REVIEW）
+- 执行报告包含 TDD 总览表
+- tasks.md 模板新增 TDD 追踪表
+
+#### 4. 测试基础设施检查前置
+- code-execute 步骤1.5 新增测试环境验证
+- 无测试框架时自动暂停并询问用户
+- 支持 Jest/Vitest/Pytest 多种框架选择
+
+#### 5. 执行流程自检清单
+- code-execute 结尾强制 12 项自检
+- 自检不通过 → 回到对应 Task 重新执行
+- 不通过不允许生成执行报告、不允许进入 code-test
+
+#### 6. 快速模式/标准模式明确切换
+- spec-creation 输出 requirement.md 新增 6 字段模式标签
+  - 模式、TDD要求、子代理要求、测试覆盖要求、触发原因、影响范围
+- code-task 在 tasks.md 头部继承模式标签
+- code-execute/code-test 读取并严格遵循模式标签
+
+### 修改文件
+- `skills/code-execute/SKILL.md` - 新增步骤0/1.5/3.7/3.8，强化约束
+- `skills/spec-creation/SKILL.md` - 增强模式标签输出
+- `skills/code-task/SKILL.md` - 新增模式标签读取和传递
+- `skills/code-test/SKILL.md` - 新增模式标签读取
+- `skills/code-task/templates/tasks-document-template.md` - 新增 TDD 追踪表
+- `skills/package.json` - 版本升级，key_features 更新
+- `CLAUDE.md` - 版本升级，工作流特色更新
+
+---
+
 ## [1.0.0] - 2026-02-09
 
 ### 新增

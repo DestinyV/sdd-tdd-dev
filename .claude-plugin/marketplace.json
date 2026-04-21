@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "sdd-tdd-dev",
-      "version": "2.4.0",
+      "version": "2.6.0",
       "source": "./plugins/sdd-tdd-dev",
       "description": "企业级SDD+TDD（规范驱动开发）Claude Code插件，提供AI辅助开发的完整工作流。包含Spec-Design-Task-Execute-Test 5个阶段的专业Skills，支持前端、后端、数据库、微服务等全类型项目。",
       "category": "development",

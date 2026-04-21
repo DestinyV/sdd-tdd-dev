@@ -3,6 +3,12 @@
 ```markdown
 # 任务列表
 
+## 执行模式
+- 模式：[standard | quick]（继承自 requirement.md）
+- TDD要求：[必须执行 | 可跳过]
+- 子代理要求：[必须使用 | 可选]
+- 测试覆盖要求：[≥85% | ≥60% | 跳过]
+
 ## 任务总览
 - 总 Task 数：[N]
 - 并行批次：[N]
@@ -23,6 +29,15 @@
 | Task ID | Task 名称 | TEST-VERIFY | Test Case ID | Browser Test ID | Mock Data |
 |---------|---------|-------------|-------------|----------------|-----------|
 | T1 | [名称] | TV-1.1 | TC-1.1.1 | BT-1.1.1 | mock_xxx.json |
+
+## TDD 追踪表（code-execute 阶段填写）⭐
+
+| Task | RED | GREEN | REFACTOR | REVIEW | 覆盖率 | 状态 |
+|------|-----|-------|----------|--------|--------|------|
+| T1 | ⏳ | ⏳ | ⏳ | ⏳ | - | 待开始 |
+| T2 | ⏳ | ⏳ | ⏳ | ⏳ | - | 待开始 |
+
+> 此表由 code-execute 阶段填写，code-test 阶段验收。
 
 ## Task 详情
 

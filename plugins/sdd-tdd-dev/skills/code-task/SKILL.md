@@ -42,11 +42,12 @@ description: |
 - ✅ code-designer 已完成，design.md 已生成且确认
 - ✅ 所有设计决策已明确
 - ✅ 关键的 TODO 项都已澄清
+- ✅ **模式标签读取**：从 `spec-dev/{requirement_desc_abstract}/spec/requirement.md` 读取工作模式标签
 - ⚠️ **快速模式**：code-task 跳过。任务拆解由 code-execute 在内存中完成。
 
 ### 快速模式下的行为
 
-当 spec 标注为快速模式时：
+当 spec 标注为快速模式时（requirement.md 中 `模式: quick`）：
 - code-task **不执行**
 - code-execute 直接读取 spec，在内存中自主拆解实现步骤
 - 不生成 tasks.md 文档
@@ -160,6 +161,16 @@ Batch 3：T6 → 执行
 生成 `tasks.md` 包含任务总览、并行执行计划、Test Case Mapping 和 Task 详情。
 
 详见：[`templates/tasks-document-template.md`](./templates/tasks-document-template.md)
+
+**在 tasks.md 头部添加模式标签**：
+
+```markdown
+## 执行模式
+- 模式：[standard | quick]（继承自 requirement.md）
+- TDD要求：[必须执行 | 可跳过]
+- 子代理要求：[必须使用 | 可选]
+- 测试覆盖要求：[≥85% | ≥60% | 跳过]
+```
 
 ---
 

@@ -13,11 +13,12 @@
 ```
 
 **工作流特色**：
-- Phase 1: 规范定义（TEST-VERIFY格式）
-- Phase 2: TDD实现（RED-GREEN-REFACTOR-REVIEW）+ 单元测试
+- Phase 1: 规范定义（TEST-VERIFY格式 + 模式标签锁定）
+- Phase 2: TDD实现（RED-GREEN-REFACTOR-REVIEW）+ 单元测试 + TDD状态追踪
 - Phase 3: 高层测试（集成、E2E、性能）+ 闭环验证
+- Phase 4: HARD-GATE强制拦截（测试环境预检、子代理强制、TDD追踪、执行自检）
 
-**版本**：v2.1.0 (2026-03-10) - 全栈开发版，支持前端/后端/移动端/全栈应用
+**版本**：v2.5.0 (2026-04-21) - 强制约束增强版，新增HARD-GATE拦截、TDD追踪、模式标签、子代理强制、执行自检
 
 ## 🏗️ 架构与文件结构
 
@@ -287,6 +288,24 @@ spec-dev/{requirement_id}/spec/
 - 支持前端+后端+数据库的完整应用设计
 - 支持微服务架构的多服务协调设计
 
+## 🔌 多平台支持
+
+本插件通过工具映射适配多个 AI 编码平台：
+
+| 平台 | Skill 加载 | 工具映射 | 说明 |
+|------|-----------|---------|------|
+| **Claude Code** | `Skill` 工具 | 默认 | 原生支持，默认平台 |
+| **Copilot CLI** | 上下文注入 | `references/copilot-tools.md` | 通过 hook 注入 Skill 内容 |
+| **Codex** | 原生发现 | `references/codex-tools.md` | 原生 Skill 发现 + `spawn_agent` |
+| **Gemini CLI** | `activate_skill` | `references/gemini-tools.md` | SDD 流程需串行执行（无子代理） |
+| **OpenCode** | `skill` 工具 | `references/opencode-tools.md` | 插件系统 + `@mention` 子代理 |
+
+**平台适配原则**：
+- Skill 文档使用 Claude Code 工具名作为"标准语言"
+- 各平台通过 `references/` 目录下的工具映射表适配
+- 对于无等效工具的平台（如 Gemini 无子代理），用串行执行替代
+- 详见：`skills/using-superpowers/SKILL.md`
+
 ## 📝 代码规范与注释
 
 ### TODO 注释格式
@@ -417,5 +436,5 @@ plugins/sdd-dev-plugin/
 
 ---
 
-**最后更新**：2026-03-10 (v2.1.0 全栈开发版)
+**最后更新**：2026-04-21 (v2.5.0 强制约束增强版)
 **让 AI 辅助的研发开发变得规范、高效、可信赖！** 🚀

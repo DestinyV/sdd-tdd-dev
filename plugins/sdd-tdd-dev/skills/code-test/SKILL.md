@@ -39,9 +39,12 @@ description: |
 - ✅ code-execute 已完成，所有Task都通过了规范和质量审查
 - ✅ code-task 已完成，任务列表已明确（标准模式）
 - ✅ 所有源代码已生成且编译通过
+- ✅ **模式标签读取**：从 `spec-dev/{requirement_desc_abstract}/spec/requirement.md` 读取工作模式标签
 - ✅ **快速模式**：code-execute 已通过质量审查（跳过规范审查和 task）
 
 ### 快速模式执行（当 spec 标注为快速模式时）
+
+**前提**：requirement.md 中 `模式: quick` 标签已确认。
 
 在快速模式下，code-test 执行以下精简流程：
 
@@ -56,6 +59,7 @@ description: |
    - ⚡ 跳过：性能测试（3.6）
 4. **步骤4**：闭环验证 —— 保持不变
 5. **步骤5**：生成精简测试报告（只包含实际执行的测试类型）
+6. **覆盖率要求**：根据模式标签中的 `测试覆盖要求` 判定（≥60% 为 quick 模式标准）
 
 ---
 
