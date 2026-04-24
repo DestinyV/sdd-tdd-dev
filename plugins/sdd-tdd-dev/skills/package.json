@@ -1,6 +1,6 @@
 {
   "name": "sdd-dev-plugin",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "Enterprise-grade SDD (Spec-Driven Development) plugin for AI-assisted development. Supports full-stack development with current focus on modern front-end frameworks (React/Vue/Angular).",
   "main": "skills",
   "type": "module",
