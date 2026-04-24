@@ -309,6 +309,38 @@ $ cd .claude/worktrees/{task-id}-{task-name}
 
 详见：`references/git-worktrees-guide.md` 和 `references/WORKTREE_CONFIRMATION_PROTOCOL.md`
 
+#### 3.1.5 接口契约验证（fullstack 模式强制）⭐🆕
+
+<HARD-GATE>当 project-mode 为 fullstack 时，每个 Task 启动时必须验证其 provides 或 consumes 标记的接口在 api-contract.md 中存在。验证失败则该 Task 拒绝执行并报错。</HARD-GATE>
+
+**验证步骤**：
+1. 读取 Task 的 provides/consumes 标记
+2. 在 `spec-dev/{requirement_desc_abstract}/api-contract/api-contract.md` 中查找对应接口定义
+3. 如果接口不存在，拒绝执行并输出错误：`接口 [METHOD /path] 未在 api-contract.md 中定义`
+4. 记录当前 api-contract.md 版本号到执行报告
+
+**版本锁定**：
+- Task 执行期间锁定 api-contract.md 的版本号
+- 如需接口变更，必须先更新版本号、重新触发接口审查、通知所有相关 Task 重新审查
+
+**接口契约遵循约束（fullstack 模式）**：
+
+**后端 Task**：
+- ❌ 禁止：返回 api-contract.md 中未定义的字段
+- ❌ 禁止：缺少 api-contract.md 中定义的必填字段
+- ❌ 禁止：使用与 api-contract.md 不一致的错误码
+- ✅ 必须：严格按照 api-contract.md 中定义的请求参数结构编码
+- ✅ 必须：严格按照 api-contract.md 中定义的响应格式返回
+- ✅ 必须：实现 api-contract.md 中定义的所有错误码
+
+**前端 Task**：
+- ❌ 禁止：调用 api-contract.md 中未定义的接口
+- ❌ 禁止：发送与 api-contract.md 不一致的请求格式
+- ❌ 禁止：忽略 api-contract.md 中定义的错误情况
+- ✅ 必须：严格按照 api-contract.md 中定义的格式发送请求
+- ✅ 必须：严格按照 api-contract.md 中定义的响应结构解析数据
+- ✅ 必须：处理 api-contract.md 中定义的所有错误情况
+
 #### 3.2 实现子代理：编码和自审查
 
 实现子代理会：

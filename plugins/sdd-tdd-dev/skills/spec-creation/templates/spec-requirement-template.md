@@ -19,6 +19,16 @@
 - 触发原因：[用户明确要求 / 默认标准模式]
 - 影响范围：[跳过的步骤清单]
 
+## 项目模式
+
+<!--
+  🚧 由 code-architect agent 在 code-designer 阶段自动识别和设置
+-->
+- **project-mode**: [frontend | backend | fullstack]
+- **needs-database**: [true | false]
+
+> 注：project-mode 和 needs-database 由 code-architect agent 在 code-designer 阶段自动识别和设置。
+
 ---
 
 ## 概述

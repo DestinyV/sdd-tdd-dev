@@ -85,19 +85,48 @@
         ]
       },
       "previous_skill": "spec-creation",
-      "next_skill": "code-task",
-      "dependencies": ["spec-creation"],
-      "key_features": [
-        "参考实现分析",
-        "需求-参考差异确认",
-        "完整的架构设计",
-        "清晰的设计决策记录"
-      ]
-    },
-    {
-      "name": "code-task",
-      "path": "skills/code-task",
-      "order": 3,
+            "next_skill": "api-contract",
+            "dependencies": ["spec-creation"],
+            "key_features": [
+              "参考实现分析",
+              "需求-参考差异确认",
+              "完整的架构设计",
+              "清晰的设计决策记录"
+            ]
+          },
+          {
+            "name": "api-contract",
+            "path": "skills/api-contract",
+            "order": 2.5,
+            "description": "接口契约定义与审查阶段。将设计阶段的接口清单转化为正式的接口契约文档，进行完整性、命名规范、类型一致性、错误处理、项目约定遵循五个维度的审查。仅在 fullstack 模式下触发。",
+            "supports": ["fullstack"],
+            "input": {
+              "type": "设计方案（接口清单初稿 + 现有项目约定）",
+              "path": "spec-dev/{requirement_desc_abstract}/design/design.md",
+              "example": "读取design.md中的接口清单和现有项目约定"
+            },
+            "output": {
+              "path": "spec-dev/{requirement_desc_abstract}/api-contract/",
+              "files": [
+                "api-contract.md (接口契约定义，含路径、方法、参数、响应、错误码)",
+                "review-report.md (接口审查报告，五维度审查结果)"
+              ]
+            },
+            "previous_skill": "code-designer",
+            "next_skill": "code-task",
+            "dependencies": ["code-designer"],
+            "key_features": [
+              "接口契约定义（路径、方法、参数、响应、错误码）",
+              "五维度接口审查（完整性、命名规范、类型一致性、错误处理、项目约定遵循）",
+              "版本管理（版本号 + 变更日志）",
+              "fullstack 模式自动触发",
+              "快速模式适配"
+            ]
+          },
+          {
+            "name": "code-task",
+            "path": "skills/code-task",
+            "order": 3,
       "description": "第3步：任务列表生成。将设计转换为详细的代码级别任务列表，为开发者定义具体的实现任务和交付物。",
       "supports": ["frontend", "backend", "fullstack"],
       "input": {
@@ -192,48 +221,56 @@
     }
   ],
   "workflow": {
-    "description": "完整的5阶段SDD工作流",
-    "flow": [
-      {
-        "step": 1,
-        "name": "Spec阶段",
-        "skill": "spec-creation",
-        "input": "需求描述",
-        "output": "spec-dev/{requirement_desc_abstract}/spec/",
-        "purpose": "定义BDD格式的需求规范和业务规则"
-      },
-      {
-        "step": 2,
-        "name": "Design阶段",
-        "skill": "code-designer",
-        "input": "spec-dev/{requirement_desc_abstract}/spec/",
-        "output": "spec-dev/{requirement_desc_abstract}/design/",
-        "purpose": "进行架构设计和技术方案规划"
-      },
-      {
-        "step": 3,
-        "name": "Task阶段",
-        "skill": "code-task",
-        "input": "spec-dev/{requirement_desc_abstract}/design/",
-        "output": "spec-dev/{requirement_desc_abstract}/tasks/",
-        "purpose": "分解设计为具体的编码任务"
-      },
-      {
-        "step": 4,
-        "name": "Execute阶段",
-        "skill": "code-execute",
-        "input": "spec-dev/{requirement_desc_abstract}/tasks/",
-        "output": "src/ + spec-dev/{requirement_desc_abstract}/execution/",
-        "purpose": "执行任务生成高质量源代码"
-      },
-      {
-        "step": 5,
-        "name": "Test阶段",
-        "skill": "code-test",
-        "input": "src/ + spec-dev/{requirement_desc_abstract}/",
-        "output": "tests/ + spec-dev/{requirement_desc_abstract}/testing/",
-        "purpose": "完整的测试验证和闭环检查"
-      }
-    ]
-  }
+      "description": "完整的6阶段SDD工作流（含api-contract接口契约阶段）",
+      "flow": [
+        {
+          "step": 1,
+          "name": "Spec阶段",
+          "skill": "spec-creation",
+          "input": "需求描述",
+          "output": "spec-dev/{requirement_desc_abstract}/spec/",
+          "purpose": "定义BDD格式的需求规范和业务规则"
+        },
+        {
+          "step": 2,
+          "name": "Design阶段",
+          "skill": "code-designer",
+          "input": "spec-dev/{requirement_desc_abstract}/spec/",
+          "output": "spec-dev/{requirement_desc_abstract}/design/",
+          "purpose": "进行架构设计和技术方案规划（含全栈场景识别和接口清单初稿）"
+        },
+        {
+          "step": 2.5,
+          "name": "Api-Contract阶段",
+          "skill": "api-contract",
+          "input": "spec-dev/{requirement_desc_abstract}/design/",
+          "output": "spec-dev/{requirement_desc_abstract}/api-contract/",
+          "purpose": "接口契约定义与审查（fullstack 强制）"
+        },
+        {
+          "step": 3,
+          "name": "Task阶段",
+          "skill": "code-task",
+          "input": "spec-dev/{requirement_desc_abstract}/design/",
+          "output": "spec-dev/{requirement_desc_abstract}/tasks/",
+          "purpose": "分解设计为具体的编码任务（含接口对齐验证和 provides/consumes 依赖）"
+        },
+        {
+          "step": 4,
+          "name": "Execute阶段",
+          "skill": "code-execute",
+          "input": "spec-dev/{requirement_desc_abstract}/tasks/",
+          "output": "src/ + spec-dev/{requirement_desc_abstract}/execution/",
+          "purpose": "执行任务生成高质量源代码（含接口契约验证和版本锁定）"
+        },
+        {
+          "step": 5,
+          "name": "Test阶段",
+          "skill": "code-test",
+          "input": "src/ + spec-dev/{requirement_desc_abstract}/",
+          "output": "tests/ + spec-dev/{requirement_desc_abstract}/testing/",
+          "purpose": "完整的测试验证和闭环检查（含接口契约测试）"
+        }
+      ]
+    }
 }

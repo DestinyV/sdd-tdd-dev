@@ -6,6 +6,12 @@
 
 **目标**：[这个任务实现什么功能]
 
+**接口标记** ⭐🆕（fullstack 模式必填）：
+- provides: [接口列表]（后端 Task，如 `[GET /api/users, POST /api/users]`）
+- consumes: [接口列表]（前端 Task，如 `[GET /api/users]`）
+
+> 注：provides/consumes 必须与 api-contract.md 中定义的接口完全一致
+
 **交付物**：
 - [ ] `src/path/to/file.ts` - [文件说明]
 - [ ] `src/path/to/file.css` - [文件说明]

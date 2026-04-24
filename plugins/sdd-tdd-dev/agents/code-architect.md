@@ -33,10 +33,55 @@ color: green
 - 规划前端上线执行顺序和回滚方案
 - 设计用户行为埋点和数据上报方案
 
+|
+## 全栈场景识别
+
+### 识别规则
+
+分析 spec 文档（`spec-dev/{requirement_desc_abstract}/spec/`），自动判断项目模式：
+
+| 条件 | 判定 |
+|------|------|
+| spec 场景中包含 UI/前端交互（页面、组件、表单、按钮等）且同时包含后端逻辑/数据存储 | `project-mode: fullstack` |
+| 仅包含 UI/前端交互，不涉及后端 | `project-mode: frontend` |
+| 仅包含后端逻辑/数据存储，不涉及 UI | `project-mode: backend` |
+
+### 数据库需求判定
+
+| 条件 | 判定 |
+|------|------|
+| 需求涉及数据持久化（新建/修改数据库表、存储业务数据） | `needs-database: true` |
+| 需求仅涉及前端 + 已有第三方 API 对接，无新数据存储 | `needs-database: false` |
+
+判定结果写入 `spec-dev/{requirement_desc_abstract}/spec/requirement.md` 的 `project-mode` 和 `needs-database` 字段。
+
+## 现有代码库约定扫描
+
+在 fullstack 模式下，必须执行代码库约定扫描，输出以下信息：
+
+### 接口风格扫描
+
+- **URL 命名风格**：扫描已有接口的 URL 模式（如 `/api/users`、`/api/v1/user/list`）
+- **HTTP 方法约定**：RESTful（GET/POST/PUT/DELETE）vs 统一 POST
+- **响应格式**：扫描已有接口的响应结构（如 `{ code, data, message }`）
+- **分页格式**：`{ page, size, total, items }` vs cursor-based
+- **错误码体系**：HTTP 状态码 vs 业务错误码
+
+### 认证/授权模式扫描
+
+- Token 传递方式（Header `Authorization: Bearer xxx` vs Cookie vs Query）
+- 权限检查位置（中间件层 vs 控制器层 vs 服务层）
+
+### 中间件/基础设施扫描
+
+- 已有的日志中间件、限流中间件、缓存策略
+- 已有的数据库连接池、ORM 配置、迁移工具
+
+扫描结果写入 design.md 的「现有项目约定」章节。
+
 ## 核心流程
 
 ### 1. 代码库模式分析
-
 提取并分析现有的模式、约定和架构决策：
 
 - 技术栈和框架版本
