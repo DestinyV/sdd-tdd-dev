@@ -112,18 +112,71 @@ npm run test:unit   # 单元测试（应 ≥ 85% 覆盖率）
 
 ### 步骤3: 高层测试设计和执行
 
-#### 3.1 集成测试
+#### 3.0 后端测试基础设施检测 ⭐🆕（后端/全栈场景）
 
-测试多个组件/模块的协作：
+> 在执行任何高层测试之前，先检测项目是否具备后端测试能力。
+
+**检测项目**：
+
+| 检测项 | 检测方式 | 未检测到时的处理 |
+|--------|---------|----------------|
+| 后端测试框架 | 检查 package.json/pom.xml/go.mod 中是否有 jest/vitest/pytest/junit/go test | 使用 AskUserQuestion 询问是否添加 |
+| HTTP 测试工具 | 检查是否有 supertest/httpx/rest-assured/httptest | 建议使用对应技术栈的工具 |
+| 数据库测试 | 检查是否有内存数据库/测试数据库配置 | 建议使用内存数据库（SQLite/H2） |
+| 测试配置文件 | 检查 jest.config.js / pytest.ini / 等是否存在 | 生成基础配置文件 |
+
+**AskUserQuestion 模板**：
+
+```
+question: "项目当前缺少后端测试基础设施，是否要添加？"
+header: "后端测试能力"
+multiSelect: true
+options:
+  - { label: "添加 API 测试框架", description: "Node.js: jest+supertest / Python: pytest+httpx / Java: junit+rest-assured" }
+  - { label: "添加集成测试配置", description: "内存数据库、测试环境变量、数据库隔离策略" }
+  - { label: "添加性能测试工具", description: "k6（推荐）或 JMeter，用于 API 压测" }
+  - { label: "跳过", description: "暂不添加后端测试基础设施（⚠️ 不推荐）" }
+```
+
+**添加测试基础设施**：
+
+根据项目技术栈生成对应的基础配置：
+
+| 技术栈 | 需添加的文件 |
+|--------|------------|
+| Node.js | `package.json` 中添加 jest/supertertest 依赖，生成 `jest.config.js` |
+| Python | 生成 `pytest.ini`、`conftest.py`、`requirements-test.txt` |
+| Java | 在 `pom.xml`/`build.gradle` 中添加测试依赖 |
+| Go | 生成 `go test` 所需的 `*_test.go` 骨架文件 |
+
+**检测通过后**，继续执行后续测试步骤。
+
+#### 3.1 后端集成测试 ⭐🆕（后端/全栈场景）
+
+测试服务端各组件/模块的协作：
 
 ```bash
-npm run test:integration
+npm run test:integration  # Node.js
+pytest tests/integration/  # Python
+mvn test -Dtest=IntegrationTest  # Java
+go test ./tests/integration/...  # Go
 ```
 
 **覆盖范围**：
-- 主要业务流程
-- 组件间的数据流
-- 状态管理的一致性
+- Repository/DAO 层与数据库的交互
+- Service 层业务逻辑（使用真实 Repository，Mock 外部依赖）
+- API 层与 Service 层的协作
+- 事务边界和一致性验证
+- 缓存策略正确性（Redis 读/写/过期）
+
+**数据库测试策略**：
+| 策略 | 适用场景 | 说明 |
+|------|---------|------|
+| 内存数据库 | 首选 | SQLite（Node.js/Python）、H2（Java）—— 每次测试重建 |
+| 事务回滚 | 需要真实 DB 时 | 每个测试在事务中执行，测试结束回滚 |
+| 测试数据库 | 复杂集成场景 | 独立测试数据库，测试前清空数据 |
+
+**集成测试模板**：`templates/backend-api-test.template.ts`
 
 #### 3.1.5 接口契约测试 ⭐🆕（fullstack 模式强制）
 
@@ -241,6 +294,23 @@ npm run test:performance
 - 交互响应时间
 - 内存占用
 
+**后端性能测试** ⭐🆕（后端/全栈场景）：
+
+```bash
+k6 run tests/performance/api-load-test.js  # k6 API 压测
+```
+
+| 指标 | 目标值 | 检测方式 |
+|------|--------|---------|
+| P95 响应时间 | < 500ms | k6 / JMeter |
+| P99 响应时间 | < 1000ms | k6 / JMeter |
+| 错误率 | < 1% | k6 / JMeter |
+| RPS（每秒请求数） | > 100 | k6 / JMeter |
+| CPU 使用率 | < 80% | 系统监控 |
+| 内存使用率 | < 80% | 系统监控 |
+
+**性能测试模板**：`references/performance-test-prompt.md`（k6 + JMeter 完整脚本示例）
+
 ### 步骤4: 闭环验证
 
 生成验证矩阵，确保：
@@ -320,6 +390,9 @@ npm run test:performance
 - 单元测试覆盖率 ≥ 85%（来自code-execute的TDD实现）
 - 验证单元测试的真实性（覆盖正常路径、边界、错误处理、业务规则）
 - 高层测试（集成、E2E、性能）全覆盖
+- **（后端/全栈场景）后端测试基础设施检测** ⭐🆕
+- **（后端/全栈场景）集成测试覆盖 Repository/Service/API 层** ⭐🆕
+- **（后端/全栈场景）API 契约测试通过（fullstack 模式强制）** ⭐🆕
 - **（前端/全栈场景）浏览器 E2E 测试全覆盖** ⭐
 - **（前端/全栈场景）视觉回归测试覆盖关键页面** ⭐
 - **（前端/全栈场景）组件 UI 测试覆盖所有组件** ⭐
@@ -342,6 +415,7 @@ npm run test:performance
 | 资源 | 说明 |
 |------|------|
 | `references/code-reviewer.md` | 代码审查指南和检查清单 |
+| `references/testing-anti-patterns.md` | 🆕 测试反模式检查清单（Mock行为、不完整数据结构等） |
 | `references/frontend-browser-testing.md` | ⭐ 前端浏览器测试完整指南（E2E、视觉回归、组件UI、MCP Browser） |
 | `references/e2e-test-prompt.md` | E2E测试设计指南（已更新链接到新模板） |
 | `references/performance-test-prompt.md` | 性能测试设计指南 |
@@ -352,6 +426,10 @@ npm run test:performance
 | `templates/frontend-e2e-test.template.ts` | ⭐ E2E 测试代码模板 |
 | `templates/visual-regression.template.ts` | ⭐ 视觉回归测试代码模板 |
 | `templates/frontend-component-ui.template.ts` | ⭐ 组件 UI 测试代码模板 |
+| `templates/backend-api-test.template.ts` | 🆕 后端 API 测试模板（多技术栈：Node.js/Python/Go） |
+| `templates/backend-e2e-api-test.template.ts` | 🆕 后端 E2E API 测试模板（完整业务流程验证） |
+| `templates/backend-db-migration-test.template.ts` | 🆕 数据库迁移测试模板（正向/回滚/数据完整性） |
+| `templates/contract-test-template.md` | 🆕 接口契约测试模板（字段/类型/错误码验证） |
 | `templates/mcp-browser-server.md` | ⭐ MCP Browser Server 配置和使用指南 |
 | `scripts/run-browser-tests.sh` | ⭐ 浏览器测试自动化执行脚本 |
 

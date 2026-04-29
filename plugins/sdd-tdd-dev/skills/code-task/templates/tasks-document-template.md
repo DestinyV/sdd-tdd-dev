@@ -10,6 +10,18 @@
 - 测试覆盖要求：[≥85% | ≥60% | 跳过]
 - 全栈模式：[前后端都改动 | 仅前端 | 仅后端]
 
+## SQL 文件引用 ⭐🆕（当 needs-database=是 时）
+
+> 数据库相关 Task 请参考以下 SQL 脚本：
+| 脚本类型 | 文件路径 | 关联 Task |
+|---------|---------|----------|
+| DDL (新建表) | `spec-dev/{req}/sql-ddl.md` 第1.1节 | [T-DB1, ...] |
+| DDL (修改表) | `spec-dev/{req}/sql-ddl.md` 第1.2节 | [T-DB2, ...] |
+| DML (种子数据) | `spec-dev/{req}/sql-ddl.md` 第2.1节 | [T-DB3, ...] |
+| DML (数据迁移) | `spec-dev/{req}/sql-ddl.md` 第2.2节 | [T-DB4, ...] |
+| 回滚脚本 | `spec-dev/{req}/sql-ddl.md` 第4节 | 全部 |
+| SQL 方言 | [mysql | postgresql] | - |
+
 ## 数据库和接口契约确认 ⭐🆕（fullstack 模式时必填）
 
 > **此部分用于确保前后端开发基于同一套数据模型和接口规范。**
@@ -89,6 +101,29 @@ Batch 3（部署准备）：
 - Batch 1（0h）：T1, T2, T3 → 3 parallelism
 - Batch 2（4h）：T4, T5 → 2 parallelism
 - Batch 3（8h）：T6 → 1 parallelism
+
+### 多项目协作执行计划 ⭐🆕（当协作模式非 single 时）
+
+> 基于 collaboration-plan.md 生成。
+
+**协作模式**：[monorepo | multi-repo | same-repo]
+**项目依赖图**：[从 collaboration-plan.md 引用]
+
+#### [project-a]（[上游/基础层]）
+| 批次 | 任务 | 并行度 | 预估耗时 | 出口门控 |
+|------|------|--------|---------|---------|
+| 1 | [T-A1, T-A2] | 2 | [4h] | [接口实现完成] |
+
+#### [project-b]（[中游]）
+- 依赖门控：[project-a] 出口门控通过后方可开始
+| 批次 | 任务 | 并行度 | 预估耗时 | 出口门控 |
+|------|------|--------|---------|---------|
+| 1 | [T-B1, T-B2] | 2 | [4h] | [集成测试通过] |
+
+#### 跨项目集成点
+| 集成点 | 提供方任务 | 消费方任务 | 验证方式 |
+|--------|-----------|-----------|---------|
+| [接口X] | [T-A2 (project-a)] | [T-B1 (project-b)] | [契约测试] |
 
 ## Test Case Mapping
 | Task ID | Task 名称 | TEST-VERIFY | Test Case ID | Browser Test ID | Mock Data |

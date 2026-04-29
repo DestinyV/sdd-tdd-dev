@@ -84,7 +84,7 @@ description: |
 
 ### Phase 3：接口审查
 
-基于以下 5 个维度进行审查，使用 `templates/review-report-template.md` 生成 `review-report.md`：
+基于以下 6 个维度进行审查，使用 `templates/review-report-template.md` 生成 `review-report.md`：
 
 1. **完整性**：每个前端交互是否都有对应的后端接口？
    - 遍历所有 spec 场景，确认每个 WHEN（用户操作）都有对应的 THEN（系统响应）背后的接口支持
@@ -107,10 +107,32 @@ description: |
    - 认证方式是否一致？
    - 分页格式是否一致？
 
+6. **🆕 数据库依赖验证**：接口涉及的表/字段是否在 sql-ddl.md 中定义
+   - 每个接口返回的字段是否都有对应的数据库表/字段定义？
+   - 接口中的查询条件是否有对应的数据库索引支持？
+   - 接口的事务需求是否与数据库设计匹配？
+
 ### Phase 4：审查判定
 
-- **通过**：5 项全部通过 → 输出 `review-report.md`（状态：通过），允许进入 code-task 阶段
+- **通过**：6 项全部通过 → 输出 `review-report.md`（状态：通过），允许进入 code-task 阶段
 - **不通过**：任一项不通过 → 输出 `review-report.md`（状态：不通过），列出不通过项和修复建议，拒绝进入 code-task 阶段
+
+### Phase 5：跨项目契约验证 ⭐🆕（多项目场景）
+
+当 requirement.md 中协作模式非 single 时，额外执行：
+
+1. **跨项目接口清单验证**：
+   - 遍历 collaboration-plan.md 中的跨项目接口清单
+   - 确认每个接口都在 api-contract.md 中有完整定义
+   - 确认提供方和消费方项目对同一接口的定义一致
+
+2. **版本兼容性验证**：
+   - 跨项目调用的接口版本号是否兼容
+   - 消费方项目的版本要求是否在提供方支持范围内
+
+3. **契约变更影响分析**：
+   - 接口变更对下游项目的影响范围
+   - 是否需要通知其他项目负责人
 
 <HARD-GATE>接口审查不通过 → 不生成 review-report.md 的通过状态，不允许进入 code-task 阶段</HARD-GATE>
 

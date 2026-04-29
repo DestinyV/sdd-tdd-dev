@@ -2,7 +2,89 @@
 
 所有重要的项目更新将在此文档中记录。
 
-## [2.5.0] - 2026-04-21
+## [2.8.0] - 2026-04-29
+
+### 新增 - SQL DDL/DML 生成 + 多项目协作 + 后端测试增强 + spec-creation 探索增强
+
+#### 1. SQL DDL/DML 可执行脚本生成
+- spec-creation 阶段新增 SQL 方言确认（MySQL/PostgreSQL/SQLite/SQLServer）
+- 自动生成 `sql-ddl.md`，包含 4 节：DDL/DML/执行顺序/回滚 SQL
+- code-designer 阶段 2.5 新增独立 SQL 文件生成（`design/sql/` 目录）
+- 新增 SQL 方言对照指南（`sql-dialect-guide.md`）
+- data-models.md 和 infrastructure.md 增加交叉引用指向 SQL 文件
+- 数据库相关 Task 增加 SQL 参考字段
+
+#### 2. 多项目协作工作流
+- requirement.md 新增多项目协作声明（协作模式、涉及项目、依赖关系）
+- code-designer 新增阶段 2.6 多项目协作协调，生成 `collaboration-plan.md`
+- code-task 新增步骤 1.6 多项目任务分组（按项目分组 + 依赖门控）
+- 支持 4 种协作模式：single / monorepo / multi-repo / same-repo
+- 新增跨项目执行计划章节（含批次表 + 接口门控表）
+- code-execute 新增多项目执行门控（严格按依赖顺序或 Mock 并行）
+- api-contract 新增 Phase 5 跨项目契约验证
+
+#### 3. 后端测试能力增强
+- code-test 新增步骤 3.0 后端测试基础设施检测（无测试能力时 AskUserQuestion 询问添加）
+- 新增后端集成测试覆盖范围（Repository/Service/API 层 + 数据库策略）
+- 新增 3 个后端测试模板：
+  - `backend-api-test.template.ts`（Node.js/Python/Go 多技术栈）
+  - `backend-e2e-api-test.template.ts`（完整业务流程验证）
+  - `backend-db-migration-test.template.ts`（正向/回滚/数据完整性）
+- 重构 `contract-test-template.md`（完整的字段/类型/错误码验证）
+- 新增后端性能测试指标和 k6 压测指引
+- 新增 testing-anti-patterns.md 参考文档
+
+#### 4. spec-creation 需求探索增强
+- 新增阶段 1.5 需求深度追问（5 个维度逐个确认）
+- 新增阶段 2.5 方案对比选择（复杂需求触发 2-3 种方案）
+- 新增阶段 4.5 规范自审查（占位符/一致性/范围/歧义/完整性/SQL/多项目）
+- 强化阶段 1 项目探索（code-explorer 从"可选"改为"标准流程必须"）
+- 新增场景间依赖关系字段（depends-on / provides-to）
+- code-explorer agent 新增"需求探索模式"
+
+#### 5. superpowers 最佳实践集成
+- 新增 TDD 铁律参考（tdd-iron-laws.md）：无失败测试不写生产代码
+- 新增验证完成前门控（verification-gate.md）：IDENTIFY→RUN→READ→VERIFY→CLAIM
+- 新增子代理状态协议（subagent-protocol.md）：DONE/DONE_WITH_CONCERNS/NEEDS_CONTEXT/BLOCKED
+- code-test 新增测试反模式检查参考
+
+### 新建文件
+- `skills/spec-creation/templates/spec-sql-ddl-template.md`
+- `skills/spec-creation/templates/spec-multi-project-template.md`
+- `skills/code-designer/references/sql-dialect-guide.md`
+- `skills/code-designer/templates/sql-ddl-template.md`
+- `skills/code-designer/templates/collaboration-plan-template.md`
+- `skills/code-test/templates/backend-api-test.template.ts`
+- `skills/code-test/templates/backend-e2e-api-test.template.ts`
+- `skills/code-test/templates/backend-db-migration-test.template.ts`
+- `skills/code-execute/references/tdd-iron-laws.md`
+- `skills/code-execute/references/verification-gate.md`
+- `skills/code-execute/references/subagent-protocol.md`
+- `skills/code-test/references/testing-anti-patterns.md`
+
+### 修改文件
+- `skills/spec-creation/SKILL.md` - +SQL方言、+多项目检测、+阶段1.5/2.5/4.5、+输出结构
+- `skills/spec-creation/templates/spec-requirement-template.md` - +sql-dialect、+多项目协作
+- `skills/spec-creation/templates/spec-data-models-template.md` - +交叉引用
+- `skills/spec-creation/templates/spec-infrastructure-template.md` - +SQL引用提示
+- `skills/spec-creation/templates/spec-scenario-template.md` - +场景间依赖
+- `skills/code-designer/SKILL.md` - +阶段2.5.2 SQL生成、+阶段2.6多项目协调、+HARD-GATE
+- `skills/code-designer/templates/design-template.md` - +SQL执行计划、+2.14多项目协作
+- `skills/code-task/SKILL.md` - +SQL/多项目任务类型、+步骤1.6分组
+- `skills/code-task/templates/task-template.md` - +所属项目、SQL参考、跨项目依赖
+- `skills/code-task/templates/tasks-document-template.md` - +SQL引用、+多项目执行计划
+- `skills/code-task/templates/backend-tasks-guide.md` - +多项目场景后端任务指南
+- `skills/code-task/templates/frontend-tasks-guide.md` - +多项目场景前端任务指南
+- `skills/code-execute/SKILL.md` - +SQL验证、+多项目门控、+资源引用
+- `skills/code-test/SKILL.md` - +后端测试基础设施检测、+集成测试增强、+后端模板引用
+- `skills/code-test/templates/contract-test-template.md` - 重构为完整契约测试
+- `skills/api-contract/SKILL.md` - +第6维度DB验证、+Phase5跨项目契约验证
+- `agents/code-architect.md` - +多项目协作模式识别
+- `agents/code-explorer.md` - +需求探索模式
+
+---
+
+## [2.7.0] - 2026-04-23
 
 ### 新增 - 六大强制约束增强
 

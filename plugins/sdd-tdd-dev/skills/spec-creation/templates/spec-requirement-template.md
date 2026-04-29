@@ -26,8 +26,10 @@
 -->
 - **project-mode**: [frontend | backend | fullstack]
 - **needs-database**: [true | false]
+- **sql-dialect**: [mysql | postgresql | sqlite | sqlserver | 未确定]（needs-database=true 时必填）
 
 > 注：project-mode 和 needs-database 由 code-architect agent 在 code-designer 阶段自动识别和设置。
+> sql-dialect 由 spec-creation 通过 AskUserQuestion 确认（needs-database=true 时），或由 code-designer 自动检测。
 
 ---
 
@@ -98,3 +100,15 @@
 - [ ] 无遗漏问题确认
 
 ---
+
+## 多项目协作 ⭐🆕
+
+<!--
+  当需求涉及多个项目/仓库时由 spec-creation 填充
+  单项目场景下标注"不涉及"
+-->
+- 协作模式：[single | monorepo | multi-repo | same-repo]（默认 single）
+- 涉及项目：[不涉及 / project-a, project-b, project-c]
+- 协作链路类型：[不涉及 / 上下游服务 | 前后端分离仓库 | 微服务集群 | Monorepo多Package]
+
+> 注：协作模式=single 时，以下字段留空。非 single 时由 code-designer 阶段生成详细协作计划。

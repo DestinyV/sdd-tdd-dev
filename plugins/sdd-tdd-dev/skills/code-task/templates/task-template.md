@@ -2,7 +2,9 @@
 
 ## Task [ID]: [Task 名称]
 
-**类型**：[组件实现/Hooks/工具/样式/API集成/构建配置/CDN部署/前端监控/数据库/中间件/日志/监控埋点/部署配置]
+**类型**：[组件实现/Hooks/工具/样式/API集成/构建配置/CDN部署/前端监控/数据库DDL/数据库DML/数据库迁移/中间件/日志/监控埋点/部署配置/联调]
+
+**所属项目** ⭐🆕（多项目场景必填）：[project-a / project-b / ... / 单项目留空]
 
 **目标**：[这个任务实现什么功能]
 
@@ -12,9 +14,19 @@
 
 > 注：provides/consumes 必须与 api-contract.md 中定义的接口完全一致
 
+**跨项目依赖** ⭐🆕（多项目场景必填）：
+- 依赖项目：[project-x]
+- 依赖接口：[GET /api/v1/xxx]
+- 依赖 Task：[T-X3]
+
 **交付物**：
 - [ ] `src/path/to/file.ts` - [文件说明]
 - [ ] `src/path/to/file.css` - [文件说明]
+
+**SQL 参考** ⭐🆕（当类型=数据库DDL/数据库DML/数据库迁移时必填）：
+- SQL 脚本路径：[spec-dev/{req}/sql-ddl.md](../../spec-dev/{req}/sql-ddl.md) 第[X]节
+- 回滚脚本：[spec-dev/{req}/sql-ddl.md](../../spec-dev/{req}/sql-ddl.md) 第4节
+- SQL 方言：[mysql | postgresql]
 
 **依赖**：
 - 依赖 Task: [T1, T2, ...] 或 无

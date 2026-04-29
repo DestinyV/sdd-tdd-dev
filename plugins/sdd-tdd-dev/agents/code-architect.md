@@ -55,6 +55,24 @@ color: green
 
 判定结果写入 `spec-dev/{requirement_desc_abstract}/spec/requirement.md` 的 `project-mode` 和 `needs-database` 字段。
 
+### 多项目协作模式识别 ⭐🆕
+
+当 spec 文档或需求描述中涉及多个项目/仓库时，识别协作模式：
+
+| 条件 | 协作模式 |
+|------|---------|
+| 需求涉及同一仓库内的多个 Package/模块（如 frontend/ backend/ admin/） | `collaboration-mode: monorepo` |
+| 需求涉及不同 Git 仓库的独立项目 | `collaboration-mode: multi-repo` |
+| 需求涉及同一仓库内前后端分离但未合入同一应用 | `collaboration-mode: same-repo` |
+| 需求仅涉及单一项目 | `collaboration-mode: single`（默认） |
+
+**多项目场景额外职责**：
+- 收集涉及项目的清单（项目名、本地路径、Git 仓库、分支）
+- 识别每个项目在需求中的角色（提供方/消费方/两者）
+- 分析项目间的接口依赖关系（哪些 API 被跨项目调用）
+- 输出项目依赖图（DAG）和协作链路类型
+- 将结果写入 requirement.md 的「多项目协作」章节
+
 ## 现有代码库约定扫描
 
 在 fullstack 模式下，必须执行代码库约定扫描，输出以下信息：

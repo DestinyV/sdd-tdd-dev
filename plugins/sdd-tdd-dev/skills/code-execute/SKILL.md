@@ -323,6 +323,23 @@ $ cd .claude/worktrees/{task-id}-{task-name}
 - Task 执行期间锁定 api-contract.md 的版本号
 - 如需接口变更，必须先更新版本号、重新触发接口审查、通知所有相关 Task 重新审查
 
+#### 3.1.6 SQL 验证（数据库相关 Task 强制）⭐🆕
+
+<HARD-GATE>当 Task 类型为 数据库DDL/数据库DML/数据库迁移 时，必须读取并验证 sql-ddl.md 中的 SQL 脚本。验证失败则该 Task 拒绝执行。</HARD-GATE>
+
+**验证步骤**：
+1. 读取 Task 的 SQL 参考字段，定位 sql-ddl.md 中的对应章节
+2. 验证 SQL 脚本语法正确性（CREATE/ALTER/INSERT 语句完整）
+3. 验证回滚脚本存在（每个 DDL/DML 后附有 ROLLBACK 注释）
+4. 验证 SQL 方言与项目配置一致
+5. 执行 SQL 脚本（如有数据库连接）或输出脚本供 DBA 审查
+
+**多项目执行门控** ⭐🆕：
+<HARD-GATE>多项目场景下，当协作模式为 monorepo/multi-repo 时：
+- 提供方项目（上游）的接口相关 Task 未完成前，不得开始消费方项目（下游）的对应 Task
+- 协作模式为 mixed 时，允许基于 Mock 的并行开发，但联调 Task 必须在提供方接口就绪后执行
+</HARD-GATE>
+
 **接口契约遵循约束（fullstack 模式）**：
 
 **后端 Task**：
@@ -628,13 +645,15 @@ standard 模式下，每个 Task 必须完整记录 TDD 四阶段日志。
 | 资源 | 说明 |
 |------|------|
 | `references/workflow-detail.md` | 完整的工作流说明和示例 |
-| `references/unit-test-real-practices.md` | 📌 **新增：编写真实可用单元测试的详细指南** |
-| `references/code-completeness-checklist.md` | 🆕 **代码完整性检查清单** - 防止框架代码遗留 |
-| `references/CODE_IMPLEMENTATION_QUALITY.md` | ⚠️ **极其重要：代码实现质量约束** - 禁止使用console等伪代码代替真实实现 |
+| `references/unit-test-real-practices.md` | 📌 新增：编写真实可用单元测试的详细指南 |
+| `references/code-completeness-checklist.md` | 🆕 代码完整性检查清单 - 防止框架代码遗留 |
+| `references/CODE_IMPLEMENTATION_QUALITY.md` | ⚠️ 极其重要：代码实现质量约束 - 禁止使用console等伪代码代替真实实现 |
 | `references/git-worktrees-guide.md` | git-worktree的详细使用指南 |
-| `references/WORKTREE_CONFIRMATION_PROTOCOL.md` | ⭐ **新增：Worktree创建确认协议** - 用户明确选择基础分支 |
-| `references/BRANCH_SAFETY_PROTOCOL.md` | ⭐ **新增：分支安全协议** - 提交、合并、删除时的分支确认 |
+| `references/WORKTREE_CONFIRMATION_PROTOCOL.md` | ⭐ 新增：Worktree创建确认协议 - 用户明确选择基础分支 |
+| `references/BRANCH_SAFETY_PROTOCOL.md` | ⭐ 新增：分支安全协议 - 提交、合并、删除时的分支确认 |
 | `references/tdd-flow.md` | TDD红-绿-重构流程说明 |
+| `references/tdd-iron-laws.md` | 🆕 TDD铁律 - 无失败测试不写生产代码，违反即删除 |
+| `references/verification-gate.md` | 🆕 验证完成前门控 - IDENTIFY→RUN→READ→VERIFY→CLAIM |
 | `references/QUICK_REFERENCE.md` | 快速参考检查清单 |
 | `prompts/tdd-implementer-prompt.md` | 实现子代理的提示词 |
 

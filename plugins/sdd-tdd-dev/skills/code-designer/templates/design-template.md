@@ -167,6 +167,13 @@ ALTER TABLE [table_name] ADD INDEX idx_[column] ([column]);
 - 一致性策略：[强一致性/最终一致性/SAGA]
 - 并发控制：[乐观锁版本号/悲观锁SELECT FOR UPDATE]
 
+**SQL 执行计划** ⭐🆕：
+- 完整 DDL 脚本：[spec-dev/{req}/sql-ddl.md](../../spec-dev/{req}/sql-ddl.md) 第1节
+- 完整 DML 脚本：[spec-dev/{req}/sql-ddl.md](../../spec-dev/{req}/sql-ddl.md) 第2节
+- 执行顺序：[见 sql-ddl.md 第3节](../../spec-dev/{req}/sql-ddl.md)
+- 回滚脚本：[见 sql-ddl.md 第4节](../../spec-dev/{req}/sql-ddl.md)
+- SQL 方言：[mysql | postgresql]
+
 ### 2.9 中间件设计 ⭐（后端/全栈场景）
 
 **Redis 缓存**：
@@ -366,6 +373,27 @@ interface [EndpointName]Response {
 | 首页 | 全页面 | 1280x720 | 整体布局验证 |
 | 登录表单 | 组件级 | - | 表单渲染验证 |
 | ... | ... | ... | ... |
+
+---
+
+### 2.14 多项目协作 ⭐🆕（多项目场景必填）
+
+> 当协作模式非 single 时必填。
+
+**协作模式**：[monorepo | multi-repo | same-repo]
+**涉及项目**：[project-a, project-b, ...]
+**协作计划**：[collaboration-plan.md](../collaboration-plan.md)
+
+**本项目角色**：[提供方 | 消费方 | 两者]
+**跨项目接口**：
+| 端点 | 方向 | 对方项目 | 状态 |
+|------|------|---------|------|
+| [API] | 提供/消费 | [project-x] | 待确认 |
+
+**依赖门控**：
+| 门控 | 前置项目 | 前置任务 | 验证方式 |
+|------|---------|---------|---------|
+| [接口X就绪] | [project-a] | [T-A3] | [契约测试通过] |
 
 ---
 
