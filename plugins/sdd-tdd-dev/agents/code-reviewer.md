@@ -53,6 +53,7 @@ color: red
 
 - **架构模式一致性**：代码层间依赖是否符合 design.md 定义的依赖规则
 - **设计模式遵循**：代码是否使用了 design.md 中定义的设计模式
+- **设计模式滥用检测**：是否在不需要的地方使用了设计模式（过度设计）
 - **SOLID 原则检查**：
   - SRP：函数/类是否职责单一
   - OCP：是否对扩展开放、对修改关闭
@@ -60,7 +61,10 @@ color: red
   - ISP：接口是否过于臃肿
   - DIP：是否依赖抽象而非具体实现
 - **严禁只写注释不实现**：函数体是否只有注释而无实际代码实现
+- **空函数体检测**：是否存在只有注释和 TODO 的空函数
+- **层边界违反**：上层是否直接跳过了中间层访问下层
 
+> 参考：[`architecture-review-checklist.md`](../code-designer/references/architecture-review-checklist.md) 完整审查清单
 > 注意：仅报告置信度 >= 80 的问题，避免误报。设计原则问题应明确指出违反了哪个原则、在哪个文件/行号、如何修复。
 
 ## ⚠️ 与test-design、code-execute、code-test的职责分工

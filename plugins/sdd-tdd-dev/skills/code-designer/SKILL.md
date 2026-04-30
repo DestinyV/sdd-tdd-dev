@@ -120,6 +120,10 @@ spec → [阶段1: 需求理解] → [阶段2: 数据库设计(按需)] → [阶
 - **数据库表设计改动** ⭐
 - **SQL DDL/DML 审查** ⭐🆕 - 完整的可执行 SQL 脚本生成、回滚脚本、执行顺序
 - **多项目架构** ⭐🆕 - 跨项目依赖、协作链路、项目清单收集
+- **设计模式选择** ⭐🆕 - 根据场景推荐合适的设计模式（详见 `references/design-patterns-guide.md`）
+- **架构风格选择** ⭐🆕 - 根据项目复杂度选择架构模式（详见 `references/architecture-patterns-guide.md`）
+- **领域建模** ⭐🆕（后端/全栈，复杂业务场景） - 提取实体、值对象、聚合根（详见 `references/domain-modeling-guide.md`）
+- **组件拆分分析** ⭐🆕 - 何时拆分、如何拆分（详见 `references/component-extraction-guide.md`）
 - **中间件和基础设施** ⭐
 - **项目配置** ⭐
 - **日志规范** ⭐
@@ -182,6 +186,62 @@ spec → [阶段1: 需求理解] → [阶段2: 数据库设计(按需)] → [阶
 - 整合 Agent 分析结果
 - 形成统一的项目理解和架构设计
 - 为下一阶段的参考组件分析提供基础
+
+---
+
+### 阶段2.2: 领域建模（复杂业务场景必执行）⭐🆕
+
+**适用场景**：后端/全栈项目，业务逻辑复杂，涉及多领域实体和跨领域协作。
+
+**参考指南**：[`references/domain-modeling-guide.md`](./references/domain-modeling-guide.md)
+
+**执行步骤**：
+1. 从 spec 场景中提取所有业务名词
+2. 分类为实体、值对象、聚合根
+3. 划定聚合边界（强一致性范围）
+4. 提取业务行为（从 WHEN-THEN 场景）
+5. 定义仓储接口（领域层）和识别应用服务
+
+**输出**：
+- 领域模型清单（实体、值对象、聚合根）
+- 聚合关系图
+- 领域服务清单
+
+---
+
+### 阶段2.3: 架构原则应用 ⭐🆕
+
+**参考指南**：
+- SOLID 原则：[`references/solid-principles-guide.md`](../code-execute/references/solid-principles-guide.md)（位于 code-execute）
+- 架构模式：[`references/architecture-patterns-guide.md`](./references/architecture-patterns-guide.md)
+- 依赖注入：[`references/dependency-injection-guide.md`](../code-execute/references/dependency-injection-guide.md)（位于 code-execute）
+
+**执行内容**：
+1. 根据项目复杂度选择架构模式（Clean/Hexagonal/Layered）
+2. 定义各层之间的依赖规则（上层依赖下层，禁止反向依赖）
+3. 识别需要依赖注入的点（外部依赖、可替换组件）
+4. 在 design.md 中明确架构模式和依赖规则图
+
+---
+
+### 阶段2.4: 组件拆分分析 ⭐🆕
+
+**参考指南**：[`references/component-extraction-guide.md`](./references/component-extraction-guide.md)
+
+**前端组件拆分**：
+1. 根据拆分触发器判定是否需要拆分
+2. 确定组件层级（容器组件 vs 展示组件）
+3. 设计 Props/Events 接口
+4. 识别可复用的共享组件
+
+**后端代码拆分**：
+1. 按职责拆分服务类（避免 God Service）
+2. 提取公共中间件和工具函数
+3. 定义 Repository 接口
+
+**输出**：
+- 组件拆分清单（前端）/ 服务拆分清单（后端）
+- 组件/服务依赖关系图
 
 ---
 

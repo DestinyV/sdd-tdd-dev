@@ -2,6 +2,38 @@
 
 所有重要的项目更新将在此文档中记录。
 
+## [2.11.0] - 2026-04-30
+
+### 新增 - 代码设计与编写能力全面增强
+
+#### 新增 7 个参考文档
+
+| 文档 | 内容 |
+|------|------|
+| design-patterns-guide.md | 17 种设计模式 + 决策树 + 反模式识别（code-designer） |
+| domain-modeling-guide.md | DDD 领域建模完整指南 + 多语言示例（code-designer） |
+| architecture-patterns-guide.md | Clean/Hexagonal/Layered/MVC 对比 + 选择建议（code-designer） |
+| solid-principles-guide.md | SOLID 五原则 + 正反示例 + 多语言实现（code-execute） |
+| dependency-injection-guide.md | 三种注入方式 + 四语言示例 + 反模式（code-execute） |
+| component-extraction-guide.md | 拆分触发器 + 决策流程 + 反模式（code-designer） |
+| architecture-review-checklist.md | 8 大类审查清单 + 三级优先级（code-designer） |
+
+#### 修改 6 个 skill/agent 文件
+
+| 文件 | 变更 |
+|------|------|
+| code-designer/SKILL.md | 新增领域建模、架构原则、组件拆分分析步骤 |
+| design-template.md | 新增设计模式、领域模型、架构风格、组件拆分章节 |
+| code-execute/SKILL.md | 新增参考文档引用、严禁注释代替实现铁律 |
+| code-task/SKILL.md | 新增领域模型、设计模式实现、共享组件抽离任务类型 |
+| task-template.md | 新增设计模式、架构层字段 |
+| code-reviewer.md | 新增 SOLID/设计模式/层边界/注释代替实现审查维度 |
+
+#### 版本更新
+
+- plugin.json → 2.11.0
+- skills/package.json → 2.11.0
+
 ## [2.9.0] - 2026-04-30
 
 ### 重构

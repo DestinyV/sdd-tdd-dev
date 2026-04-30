@@ -670,8 +670,18 @@ standard 模式下，每个 Task 必须完整记录 TDD 四阶段日志。
 | `references/design-patterns-catalog.md` | 🆕 GoF 设计模式目录（按场景分类，含代码示例） |
 | `references/component-extraction-guide.md` | 🆕 组件抽离指导（何时拆分、Props设计、组合vs继承） |
 | `references/ddd-basics.md` | 🆕 DDD 基础概念参考（实体、值对象、聚合根、领域服务） |
+| `references/dependency-injection-guide.md` | 🆕 依赖注入/IoC 指南（三种注入方式 + 四语言示例） |
 | `references/no-comment-only-code.md` | 🆕 严禁只写注释不实现铁律 |
 | `references/subagent-protocol.md` | 🆕 子代理状态协议与模型选择 |
+
+**来自 code-designer 的参考文档**：
+| 文档 | 说明 |
+|------|------|
+| `../code-designer/references/design-patterns-guide.md` | 🆕 设计模式指南（17种模式 + 决策树 + 反模式识别） |
+| `../code-designer/references/domain-modeling-guide.md` | 🆕 领域建模指南（DDD 核心概念 + 四步法 + 多语言示例） |
+| `../code-designer/references/architecture-patterns-guide.md` | 🆕 架构模式指南（Clean/Hexagonal/Layered/MVC 对比 + 选择建议） |
+| `../code-designer/references/component-extraction-guide.md` | 🆕 组件提取指南（拆分触发器 + 决策流程 + 反模式） |
+| `../code-designer/references/architecture-review-checklist.md` | 🆕 架构审查清单（8大类 + 三级优先级） |
 | `references/QUICK_REFERENCE.md` | 快速参考检查清单 |
 | `prompts/tdd-implementer-prompt.md` | 实现子代理的提示词 |
 

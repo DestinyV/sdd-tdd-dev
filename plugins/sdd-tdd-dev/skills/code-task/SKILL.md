@@ -139,6 +139,9 @@ Phase 3: project-c + project-d (可并行)
 5. **🆕 多项目模式强制顺序**：按项目依赖拓扑排序 → 各项目内部按上述顺序
 
 **任务类型**：
+- **🆕 领域模型** ⭐🆕：实体、值对象、聚合根定义（参考 domain-modeling-guide.md）
+- **🆕 设计模式实现** ⭐🆕：按 design.md 定义的设计模式实现代码（参考 design-patterns-guide.md）
+- **🆕 共享组件抽离** ⭐🆕：复用组件提取、Hooks/工具函数提取（参考 component-extraction-guide.md）
 - **🆕 数据库DDL** ⭐：新建表、修改表结构、索引（参考 sql-ddl.md）
 - **🆕 数据库DML** ⭐：种子数据、数据迁移（参考 sql-ddl.md）
 - **🆕 数据库迁移** ⭐：迁移脚本执行验证
