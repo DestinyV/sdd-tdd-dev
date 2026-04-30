@@ -134,13 +134,34 @@ spec → [阶段1: 需求理解] → [阶段2: 数据库设计(按需)] → [阶
 - **集成依赖**
 
 - **分配 Agent 了解项目**（根据情况选择）：
-  - **主要方案**：分配 **code-architect agent**（代码库模式分析 + 架构设计二合一）
-    - code-architect 本身会进行代码库模式分析
-    - 包括现有代码结构、技术栈、命名约定、设计模式
-    - 然后基于分析进行设计
-  - **深度方案**（可选）：先分配 **code-explorer agent** 深度追踪现有实现，再分配 **code-architect**
-    - 适用于需要详细理解现有功能实现细节的情况
-    - code-explorer 和 code-architect 可以**并行执行**（都是分析和设计阶段）
+  - **前置步骤**（必须执行）：要求 agent 先执行「项目文档发现」
+    - 读取项目的 CLAUDE.md / AGENTS.md / README.md / ARCHITECTURE.md 等自述文档
+    - 提取项目声明的架构模式、模块边界、分层约定、技术栈
+    - 文档声明的约定是架构设计的第一优先级约束
+    - 详见参考文档：[`../spec-creation/references/project-convention-discovery.md`](../spec-creation/references/project-convention-discovery.md)
+
+**并行探索策略**（双路并行）：
+- 同时发射 **code-explorer** 和 **code-architect**（使用 Agent 工具 + `run_in_background: true`）
+- **code-explorer**：追踪相关功能的执行路径、映射抽象层、识别设计模式
+- **code-architect**：项目模式分析、架构蓝图设计
+- 两者**互不阻塞**，等待全部完成后整合
+
+**整合流程**：
+1. 同时发射两路 subagent
+2. 以 code-architect 的输出为主体（架构决策、蓝图）
+3. 用 code-explorer 的发现补充具体代码引用和路径映射
+4. 将两者结果合并为统一的项目理解报告
+
+**容错机制**：
+- 任一路失败，不阻塞另一路
+- code-explorer 失败：以 code-architect 的代码模式分析为基础，标注缺失具体引用
+- code-architect 失败：以 code-explorer 的代码分析为基础，由主 agent 补充架构决策
+- 两路都失败：回退到主 agent 自行分析
+
+**小型项目策略**：
+- 文件数 < 200 的项目仅分配 code-architect agent
+- 无需并行发射
+
 - 整合 Agent 分析结果，形成项目理解报告
 - 识别是新增功能、修改现有功能还是优化
 
@@ -155,37 +176,24 @@ spec → [阶段1: 需求理解] → [阶段2: 数据库设计(按需)] → [阶
 
 ### 阶段2: Agent 分析工作
 
-根据阶段1的方案分配相应的 Agent。
+根据阶段1的并行探索策略，执行 agent 分析。
 
-**方案A：标准流程（推荐）**
-- **分配 code-architect Agent** 进行项目分析和架构设计
-- code-architect 会完成：
-  - 代码库模式分析（技术栈、框架版本、文件组织、命名约定等）
-  - 寻找现有的类似功能以理解已建立的做法
-  - 确定可复用的模式
-  - 输出架构蓝图和设计方案
-- **多项目场景** ⭐🆕：当 requirement.md 中「涉及项目」非空时：
-  - code-architect 额外收集每个项目的本地路径和技术栈
-  - 识别各项目间的共享依赖和接口
-  - 输出项目清单和依赖关系图
+**执行流程**：
+- code-explorer 和 code-architect 按阶段1定义的双路并行策略同时发射
+- code-explorer 输出：功能实现分析、代码引用、路径映射
+- code-architect 输出：项目模式分析、架构蓝图
+- 等待全部完成后整合：以 code-architect 为主体，用 code-explorer 补充具体引用
 
-**方案B：深度分析流程**（需要详细理解现有实现）
-- **并行分配 code-explorer 和 code-architect Agents**：
-  - **code-explorer**：
-    - 追踪相关功能的执行路径和代码流
-    - 映射抽象层（展示层 → 业务逻辑层 → 数据层）
-    - 识别使用的设计模式和架构决策
-    - 输出完整的功能实现分析
-  - **code-architect**：
-    - 进行项目模式分析
-    - 基于 code-explorer 的分析进行架构设计
-    - 输出架构蓝图
-  - 两个 Agent **可以并行执行**（都是分析阶段，不互相阻塞）
+**多项目并行探索** ⭐🆕：
+当需求涉及多个项目/仓库时：
+- 对每个项目独立发射分析 subagent（并行执行）
+- 每个 subagent 负责收集该项目的技术栈、目录结构、现有模式
+- 等待全部完成后，构建项目依赖图
+- 主 Agent 负责汇总各项目信息、识别跨项目共享依赖和接口
 
-**汇总**：
-- 整合 Agent 分析结果
-- 形成统一的项目理解和架构设计
-- 为下一阶段的参考组件分析提供基础
+**容错机制**：
+- 任一路失败不阻塞其他路，标注"⚠️ 该路分析失败"
+- 全部失败时回退到主 agent 自行分析
 
 ---
 
