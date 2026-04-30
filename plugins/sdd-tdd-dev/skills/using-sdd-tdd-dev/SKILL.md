@@ -1,15 +1,15 @@
 ---
-name: using-superpowers
-description: "You MUST use this before any creative work - establishes how to find and use skills, requiring Skill tool invocation before ANY response including clarifying questions"
+name: using-sdd-tdd-dev
+description: "You MUST use this before any creative work - establishes how to find and use sdd-tdd-dev skills, requiring Skill tool invocation before ANY response including clarifying questions"
 ---
 
-# 使用 Skills
+# 使用 SDD-TDD-DEV Skills
 
 ## 规则
 
 **技能优先级**：
 1. **用户指令**（CLAUDE.md, GEMINI.md, AGENTS.md, 直接请求）—— 最高优先级
-2. **Superpowers Skills** —— 覆盖默认系统行为
+2. **SDD-TDD-DEV Skills** —— 覆盖默认系统行为
 3. **默认系统提示** —— 最低优先级
 
 如果用户指令与 Skill 冲突，遵循用户指令。
