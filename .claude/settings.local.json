@@ -4,7 +4,10 @@
       "Bash(git add:*)",
       "Bash(git push:*)",
       "Bash(chmod:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(gh auth:*)",
+      "Bash(GIT_SSH_COMMAND=\"ssh -v\" git push 2>&1 | head -20)",
+      "Bash(git remote:*)"
     ]
   }
 }
