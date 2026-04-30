@@ -393,6 +393,57 @@ const fields = {
 
 ---
 
+## 检查类别 7: 严禁只写注释不实现 ⭐🆕
+
+详见完整文档：`no-comment-only-code.md`
+
+```markdown
+**问题**: 函数体只有注释，没有实际代码实现
+**影响**: 功能完全缺失，运行时将抛出错误或返回 undefined
+**示例**:
+```typescript
+// ❌ 错误：只写注释不实现
+function processOrder(order: Order): Result {
+  // 1. 验证订单
+  // 2. 计算金额
+  // 3. 扣减库存
+  throw new Error('Not implemented');
+}
+```
+
+**修复方案**: 必须实现完整的函数体逻辑
+
+**优先级**: 🔴 高 - 必须修复
+```
+
+```markdown
+**问题**: 注释掉的代码替代实现
+**影响**: 代码无法运行
+**示例**:
+```typescript
+// ❌ 错误
+function sendNotification(msg: string) {
+  // await fetch('/api/notify', { method: 'POST', body: JSON.stringify({ msg }) });
+}
+```
+
+**优先级**: 🔴 高 - 必须修复
+```
+
+```markdown
+**问题**: TODO 注释标记未实现
+**影响**: 功能缺失
+**示例**:
+```typescript
+function exportReport(data: ReportData): File {
+  // TODO: 实现报表导出
+  throw new Error('TODO');
+}
+```
+
+**优先级**: 🔴 高 - 必须修复
+```
+
 ## 最佳实践
 
 1. **宁删勿留** - 如果不需要某个部分（比如样式），完全删除而不是留框架

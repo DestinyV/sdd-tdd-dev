@@ -401,8 +401,13 @@ $ cd .claude/worktrees/{task-id}-{task-name}
 **代码实现要求**：
 - TypeScript strict模式（所有参数和返回值都有类型）
 - 遵循项目命名规范（camelCase/PascalCase）
-- 为复杂逻辑添加注释
+- 为复杂逻辑添加注释（注释说明代码做什么，不能替代代码实现本身）
 - 最终代码不应有待定的TODO注释
+- **遵循软件设计原则**：详见 `references/design-principles.md`（SOLID、DRY、KISS、YAGNI、GRASP）
+- **遵循架构模式**：按照 design.md 中定义的架构模式和依赖规则实现，详见 `references/architecture-patterns.md`
+- **遵循设计模式**：根据场景选择合适的设计模式，详见 `references/design-patterns-catalog.md`
+- **遵循组件抽离原则**：详见 `references/component-extraction-guide.md`
+- **DDD 后端项目**：遵循领域驱动设计概念，详见 `references/ddd-basics.md`
 
 **单元测试约束（确保测试真实可用）**：
 
@@ -445,6 +450,8 @@ $ cd .claude/worktrees/{task-id}-{task-name}
 - 代码是否符合design.md的架构规范
 - 关键组件是否按设计实现
 - 命名、结构是否符合规范
+- **架构一致性**：层间依赖是否符合 design.md 定义的架构模式和依赖规则
+- **设计模式遵循**：代码是否遵循 design.md 中定义的设计模式
 
 #### 3.4 质量审查
 
@@ -453,6 +460,9 @@ $ cd .claude/worktrees/{task-id}-{task-name}
 - ESLint/代码规范检查
 - 最佳实践
 - 可读性和可维护性
+- **SOLID 原则检查**：是否有违反单一职责、开闭、里氏替换、接口隔离、依赖倒置原则
+- **DRY 原则检查**：是否有重复代码应提取
+- **严禁只写注释不实现**：详见 `references/no-comment-only-code.md`
 - **🆕 完整性检查**：确保没有不完整的框架代码（如空的样式块、只有TODO的函数等）
   - 禁止遗留任何框架代码（示例注释但无实现）
   - 禁止遗留任何TODO注释在最终代码中
@@ -633,6 +643,7 @@ standard 模式下，每个 Task 必须完整记录 TDD 四阶段日志。
 - **同一Task的改动提交到不同分支** - 创建worktree时确定的分支是唯一目标
 - **在Worktree中中途切换分支** - 禁止git checkout到其他分支
 - **使用console/print等伪代码代替真实实现** - 不能用console.log、print、echo等简单输出伪装成逻辑实现
+- **只写注释不实现具体代码** - 注释不能替代代码实现，函数体必须有真正的逻辑实现 ⭐🆕
 - **standard 模式下跳过子代理**（必须使用 Agent 工具）⭐ **新增**
 - **未验证测试环境就开始编码**（步骤1.5）⭐ **新增**
 - **standard 模式下跳过 RED 阶段** ⭐ **新增**
@@ -654,6 +665,13 @@ standard 模式下，每个 Task 必须完整记录 TDD 四阶段日志。
 | `references/tdd-flow.md` | TDD红-绿-重构流程说明 |
 | `references/tdd-iron-laws.md` | 🆕 TDD铁律 - 无失败测试不写生产代码，违反即删除 |
 | `references/verification-gate.md` | 🆕 验证完成前门控 - IDENTIFY→RUN→READ→VERIFY→CLAIM |
+| `references/design-principles.md` | 🆕 软件设计原则综合参考（SOLID+DRY+KISS+YAGNI+GRASP） |
+| `references/architecture-patterns.md` | 🆕 常用架构模式参考（Clean/Hexagonal/Layered/MVC/CQRS） |
+| `references/design-patterns-catalog.md` | 🆕 GoF 设计模式目录（按场景分类，含代码示例） |
+| `references/component-extraction-guide.md` | 🆕 组件抽离指导（何时拆分、Props设计、组合vs继承） |
+| `references/ddd-basics.md` | 🆕 DDD 基础概念参考（实体、值对象、聚合根、领域服务） |
+| `references/no-comment-only-code.md` | 🆕 严禁只写注释不实现铁律 |
+| `references/subagent-protocol.md` | 🆕 子代理状态协议与模型选择 |
 | `references/QUICK_REFERENCE.md` | 快速参考检查清单 |
 | `prompts/tdd-implementer-prompt.md` | 实现子代理的提示词 |
 
